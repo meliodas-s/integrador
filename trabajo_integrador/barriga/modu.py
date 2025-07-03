@@ -301,7 +301,7 @@ class Barra:
             )
         )
 
-    def cal_rig(self):
+    def cal_ril(self):
         # Hay terminos repetirdos
         te1 = self.are*self.mod/self.lar
         te2 = 12*self.mod*self.ine/self.lar**3
@@ -323,12 +323,12 @@ class Barra:
             )
         )
 
+    def cal_rig(self):
+        # Calculo la matriz de rigidez global (k) y guardo.
+        self.rig = (self.tra.T@self.ril)@self.tra
+
     def cal_lar(self):
         self.lar = np.sqrt((self.xfi-self.xin)**2+(self.yfi-self.yin)**2)
 
-    
     # # Guardo la matriz de rigidex local
     # brc.ril = mrl
-
-    # # Calculo la matriz de rigidez global (k) y guardo.
-    # brc.rig = (tra.T@mrl)@tra
