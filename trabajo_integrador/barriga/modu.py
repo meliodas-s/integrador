@@ -201,7 +201,7 @@ class Rock():
             )
 
             # Cálculo del esfuerzo de la barra
-            esf = (ib.rig@ib.tra)@vde
+            esf = (ib.ril@ib.tra)@vde
 
             if pri:
                 display('')

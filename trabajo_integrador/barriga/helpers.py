@@ -74,6 +74,9 @@ def mrb(bar: pd.DataFrame, ino: pd.DataFrame, rig: pd.DataFrame, brc):
             ]
         )
     )
+    
+    # Guardo la matriz de rigidex local
+    brc.ril = mrl
 
     # Calculo la matriz de rigidez global (k) y guardo.
     brc.rig = (tra.T@mrl)@tra
