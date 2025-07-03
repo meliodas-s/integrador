@@ -302,31 +302,30 @@ class Barra:
         )
 
     def cal_rig(self):
-        pass
+        # Hay terminos repetirdos
+        te1 = self.are*self.mod/self.lar
+        te2 = 12*self.mod*self.ine/self.lar**3
+        te3 = 6*self.mod*self.ine/self.lar**2
+        te4 = 4*self.mod*self.ine/self.lar
+        te5 = 2*self.mod*self.ine/self.lar
+
+        # Matriz rigidez local de la barra (k`)
+        self.ril = (
+            np.array(
+                [
+                    [te1, 0, 0, -te1, 0, 0],
+                    [0, te2, te3, 0, -te2, te3],
+                    [0, te3, te4, 0, -te3, te5],
+                    [-te1, 0, 0, te1, 0, 0],
+                    [0, -te2, -te3, 0, te2, -te3],
+                    [0, te3, te5, 0, -te3, te4]
+                ]
+            )
+        )
 
     def cal_lar(self):
         self.lar = np.sqrt((self.xfi-self.xin)**2+(self.yfi-self.yin)**2)
 
-    # # Hay terminos repetirdos
-    # te1 = are*mod/lar
-    # te2 = 12*mod*ine/lar**3
-    # te3 = 6*mod*ine/lar**2
-    # te4 = 4*mod*ine/lar
-    # te5 = 2*mod*ine/lar
-
-    # # Matriz rigidez local de la barra (k`)
-    # mrl = (
-    #     np.array(
-    #         [
-    #             [te1, 0, 0, -te1, 0, 0],
-    #             [0, te2, te3, 0, -te2, te3],
-    #             [0, te3, te4, 0, -te3, te5],
-    #             [-te1, 0, 0, te1, 0, 0],
-    #             [0, -te2, -te3, 0, te2, -te3],
-    #             [0, te3, te5, 0, -te3, te4]
-    #         ]
-    #     )
-    # )
     
     # # Guardo la matriz de rigidex local
     # brc.ril = mrl
