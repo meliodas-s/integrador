@@ -155,9 +155,6 @@ class Rock():
                 isf = isf.col_join(sp.Matrix([fil['fue']]))
                 igt.append(des)
 
-        # Imprimo resultados
-        display(igt)
-
         # Matriz resultante de incognitas
         res = rgs * mde
         eqs = []
@@ -165,7 +162,7 @@ class Rock():
         # Imprimiendo
         if pri:
             hlp.col("Matriz de desplazamiento:")
-            sp.pprint(mde)
+            display(mde)
 
         # Cargo eqs con los items de res
         for idx in range(res.rows):
@@ -177,7 +174,10 @@ class Rock():
 
         if pri:
             hlp.col("Soluciones:")
-            print(sol)
+            display(sp.Eq(
+                sp.Matrix(list(sol.keys())),
+                sp.Matrix(list(sol.values())))
+            )
 
         # Defino la matriz de soluciones
         self.ret = dict()
@@ -204,7 +204,6 @@ class Rock():
             esf = (ib.ril@ib.tra)@vde
 
             if pri:
-                display('')
                 hlp.col(f"Fuerza en barra {ib.bar}")
                 display(pd.DataFrame(esf, index=den, columns=[f'{ib.bar}']))
 

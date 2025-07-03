@@ -83,8 +83,7 @@ def mrb(bar: pd.DataFrame, ino: pd.DataFrame, rig: pd.DataFrame, brc):
 
     # Convierto (k) en df para coincidencia de indices.
     mrg = pd.DataFrame(brc.rig, index=fid, columns=cid)
-    display(mrg)
-    
+
     # Guardo datos de transpuesta.
     brc.tra = tra
 
