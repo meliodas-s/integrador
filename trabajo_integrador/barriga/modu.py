@@ -13,17 +13,19 @@ from IPython.display import display
 
 
 class Rock():
-    '''
-    Calcula la matriz de rigidez, desplazamientos y fuerzas.
+    '''Calcula la matriz de rigidez global.
+    Así como los vectores de desplazamientos y fuerzas nodales.
 
     Parameters
     ----------
-    inc: array_like
-        Incognitas con las columnas (fuerza, desplazamiento)
+    inc : array_like
+        Matriz de incógnitas. Cada fila representa una variable con las
+        columnas: (fuerza, desplazamiento).
 
-    ino: array_like
-        Indice de nodos con las columnas 
-        (numero de nodo, indice de momento, indice de fuerx, indice de fuery)
+    ino : array_like
+        Matriz de índices de nodos. Cada fila representa un nodo y contiene las
+        columnas: (número de nodo, índice de momento, índice de fuerza en x,
+        índice de fuerza en y).
     '''
 
     def __init__(self, inc, iba, ino, pri=False):
@@ -64,7 +66,6 @@ class Rock():
             # Nodos que conectan a esa barra
             noi = fil['noi']
             nof = fil['nof']
-            bar = fil['bar']
 
             # Creo una nueva barra
             lba.append(
@@ -94,7 +95,7 @@ class Rock():
             lba[idx].cal_rig()
 
             # Agrego los esfuerzos a esta barra
-            hlp.mrb(lba[idx], ini, rig)
+            hlp.mrb(lba[idx], rig)
 
         # Se crea matriz symbolica rigSimbolica
         rgs = sp.Matrix(rig.values)

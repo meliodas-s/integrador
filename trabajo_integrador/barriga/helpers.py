@@ -4,11 +4,10 @@ import sympy as sp
 from IPython.display import display
 
 
-def mrb(bar, ino: pd.DataFrame, rig: pd.DataFrame):
+def mrb(bar, rig: pd.DataFrame):
     '''Carga la matriz de rigiddez para cada barra.
     Dada la barra y la matriz de rigidez suma sus respectivo
     aporte en cada pocision.
-
     '''
     # filas(indices) de momentos, fuerx, fuery
     fid = [bar.nix, bar.niy, bar.nim, bar.nfx, bar.nfy, bar.nfm]
