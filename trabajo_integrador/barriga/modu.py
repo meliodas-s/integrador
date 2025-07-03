@@ -287,10 +287,49 @@ class Barra:
         self.lmy = (self.yfi-self.yin)/self.lar
 
     def cal_tra(self):
-        pass
+        # Matris de transformacion
+        self.tra = (
+            np.array(
+                [
+                    [self.lmx, self.lmy, 0, 0, 0, 0],
+                    [-self.lmy, self.lmx, 0, 0, 0, 0],
+                    [0, 0, 1, 0, 0, 0],
+                    [0, 0, 0, self.lmx, self.lmy, 0],
+                    [0, 0, 0, -self.lmy, self.lmx, 0],
+                    [0, 0, 0, 0, 0, 1]
+                ]
+            )
+        )
 
     def cal_rig(self):
         pass
 
     def cal_lar(self):
         self.lar = np.sqrt((self.xfi-self.xin)**2+(self.yfi-self.yin)**2)
+
+    # # Hay terminos repetirdos
+    # te1 = are*mod/lar
+    # te2 = 12*mod*ine/lar**3
+    # te3 = 6*mod*ine/lar**2
+    # te4 = 4*mod*ine/lar
+    # te5 = 2*mod*ine/lar
+
+    # # Matriz rigidez local de la barra (k`)
+    # mrl = (
+    #     np.array(
+    #         [
+    #             [te1, 0, 0, -te1, 0, 0],
+    #             [0, te2, te3, 0, -te2, te3],
+    #             [0, te3, te4, 0, -te3, te5],
+    #             [-te1, 0, 0, te1, 0, 0],
+    #             [0, -te2, -te3, 0, te2, -te3],
+    #             [0, te3, te5, 0, -te3, te4]
+    #         ]
+    #     )
+    # )
+    
+    # # Guardo la matriz de rigidex local
+    # brc.ril = mrl
+
+    # # Calculo la matriz de rigidez global (k) y guardo.
+    # brc.rig = (tra.T@mrl)@tra
