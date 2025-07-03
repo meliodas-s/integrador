@@ -60,33 +60,11 @@ class Rock():
 
         # Merge de datos
         for idx, fil in iba.iterrows():
-            # Agrego una nueva barra
-            # lba.append(Barra())
 
+            # Nodos que conectan a esa barra
             noi = fil['noi']
             nof = fil['nof']
             bar = fil['bar']
-
-            # Coordenadas x
-            xin = ini.loc[noi, 'cox']
-            xfi = ini.loc[nof, 'cox']
-
-            # Coordenadas y
-            yfi = ini.loc[nof, 'coy']
-            yin = ini.loc[noi, 'coy']
-
-            # Largo (funcion distancia)
-            lar = np.sqrt((xfi-xin)**2+(yfi-yin)**2)
-
-            # Guardando en array
-            iba.loc[idx, 'lar'] = lar
-
-            # Calculando lambdax y lambday
-            iba.loc[idx, 'lmx'] = (xfi-xin)/lar
-            iba.loc[idx, 'lmy'] = (yfi-yin)/lar
-
-            # print(int(fil['nof']))
-            # print(ino.loc[int(fil['nof'])])
 
             # Creo una nueva barra
             lba.append(
@@ -111,9 +89,12 @@ class Rock():
             lba[idx].cal_lar()
             lba[idx].cal_lmx()
             lba[idx].cal_lmy()
+            lba[idx].cal_tra()
+            lba[idx].cal_ril()
+            lba[idx].cal_rig()
 
             # Agrego los esfuerzos a esta barra
-            hlp.mrb(iba.iloc[idx], ini, rig, lba[idx])
+            hlp.mrb(lba[idx], ini, rig)
 
         # Se crea matriz symbolica rigSimbolica
         rgs = sp.Matrix(rig.values)
@@ -329,6 +310,3 @@ class Barra:
 
     def cal_lar(self):
         self.lar = np.sqrt((self.xfi-self.xin)**2+(self.yfi-self.yin)**2)
-
-    # # Guardo la matriz de rigidex local
-    # brc.ril = mrl
