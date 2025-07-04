@@ -1,5 +1,5 @@
 # Ignorar archivos compilados de Python
-__pycache__/
+*/__pycache__/*
 *.py[cod]
 
 # Archivos de entorno virtual

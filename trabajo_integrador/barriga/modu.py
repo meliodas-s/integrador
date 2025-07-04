@@ -4,7 +4,8 @@ import numpy as np
 from . import helpers as hlp
 import sympy as sp
 from IPython.display import display
-from .modelos.barra import Barra
+from .modelos.barra import Barra, Momento
+from .modelos.carga import Carga
 
 
 class Rock():
@@ -23,7 +24,12 @@ class Rock():
         índice de fuerza en y).
     '''
 
-    def __init__(self, inc, iba, ino, pri=False):
+    def __init__(self, inc, iba, ino, car, pri=False):
+
+        # Input de cargas
+        cgs: list[Carga] = []
+        for i in car:
+            cgs.append(Carga(i[0], i[1], i[2]))
 
         # Input fuerzas e incognitas (encognitas)
         ncc = ['fue', 'des']
@@ -162,10 +168,10 @@ class Rock():
         # Consigo los valores de las fuerzas en las barras
         for ib in lba:
 
-            # Desplazamiento de los nodos en x e y
+            # desplazamiento de los nodos en x e y
             den = [ib.nix, ib.niy, ib.nim, ib.nfx, ib.nfy, ib.nfm]
 
-            # Vector de desplazamientos: [DNx, DNy, DFx, DFy]
+            # vector de desplazamientos [DNx, DNy, DFx, DFy]
             vde = np.array(
                 [
                     isd[int(den[0])-1],
@@ -177,13 +183,37 @@ class Rock():
                 ]
             )
 
-            # Cálculo del esfuerzo de la barra
+            # cálculo del esfuerzo de la barra
             esf = (ib.ril@ib.tra)@vde
+            esf = pd.DataFrame(esf, index=den, columns=[f'{ib.bar}'])
 
             if pri:
                 hlp.col(f"Fuerza en barra {ib.bar}")
-                display(pd.DataFrame(esf, index=den, columns=[f'{ib.bar}']))
+                display(esf)
 
-            # Guardo los valores
+            # guardo los valores
+            ib.esf = esf
             self.ret[f'{idx+1}'] = esf
             self.isd = isd
+
+        # momentos en barras con cargas
+        for cag in cgs:
+
+            # indice de barra
+            iba = cag.bar
+
+            # barra en cuestion
+            bar = lba[iba-1]
+
+            # indice de momento inicial y final
+            nim = int(bar.nim)
+            nfm = int(bar.nfm)
+            
+            # momento inicial y momento final
+            mic = -float(bar.esf.loc[nim].iloc[0])
+            mfl = float(bar.esf.loc[nfm].iloc[0])
+
+            # ecuacion de esfuerzo normal en toda la barra
+            ecu = ((mfl-mic)/(bar.lar-0))*(cag.vrx-0) + mic
+            ecu += cag.mom
+            ecu = ecu.subs({cag.vrl:bar.lar})

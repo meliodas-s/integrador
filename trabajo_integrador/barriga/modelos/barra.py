@@ -1,6 +1,26 @@
 from dataclasses import dataclass
 import numpy as np
 
+
+class Esfuerzo:
+    pass
+
+    def graficar(self):
+        pass
+
+
+class Momento(Esfuerzo):
+    pass
+
+
+class Cortante(Esfuerzo):
+    pass
+
+
+class Normal(Esfuerzo):
+    pass
+
+
 @dataclass
 class Barra:
     """
@@ -56,18 +76,29 @@ class Barra:
     are: float
     mod: float
     ine: float
+    
+    # ids de esfuerzos en nodo cercano
     nim: int
     nix: int
     niy: int
+    
+    # ids de esfuerzos en nodo lejanos
     nfm: int
     nfx: int
     nfy: int
+    
+    # coordenadas
     xin: float
     xfi: float
     yin: float
     yfi: float
+    
+    # matrices y ecuaciones
     tra: np.array = None
     rig: np.array = None
+    mom: Momento = None
+    cor: Cortante = None
+    nor: Normal = None
 
     def cal_lmx(self):
         self.lmx = (self.xfi-self.xin)/self.lar
