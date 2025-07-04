@@ -1,0 +1,26 @@
+# Ignorar archivos compilados de Python
+__pycache__/
+*.py[cod]
+
+# Archivos de entorno virtual
+venv/
+env/
+
+# Configuración de editores
+.vscode/
+.idea/
+
+# Archivos del sistema
+*.log
+*.swp
+*.DS_Store
+
+# Archivos temporales
+*.bak
+*.tmp
+
+# Archivos de bases de datos
+*.sqlite3
+
+# Archivos personales o secretos
+.env
