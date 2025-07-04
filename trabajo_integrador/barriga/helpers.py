@@ -1,8 +1,4 @@
 import pandas as pd
-import numpy as np
-import sympy as sp
-from IPython.display import display
-
 
 def mrb(bar, rig: pd.DataFrame):
     '''Carga la matriz de rigiddez para cada barra.
