@@ -4,8 +4,10 @@ import numpy as np
 from . import helpers as hlp
 import sympy as sp
 from IPython.display import display
-from .modelos.barra import Barra, Momento
+from .modelos.barra import Barra
 from .modelos.carga import Carga
+
+from .vistas.estructura import GrfEst
 
 
 class Rock():
@@ -201,19 +203,47 @@ class Rock():
 
             # indice de barra
             iba = cag.bar
+            print(cag)
 
             # barra en cuestion
             bar = lba[iba-1]
-
-            # indice de momento inicial y final
-            nim = int(bar.nim)
-            nfm = int(bar.nfm)
             
-            # momento inicial y momento final
-            mic = -float(bar.esf.loc[nim].iloc[0])
-            mfl = float(bar.esf.loc[nfm].iloc[0])
+            match cag.tip:
+                case 1:
+                    bar.cav = cag
+                case 2:
+                    bar.cah = cag
+                case 3:
+                    bar.cat = cag
 
-            # ecuacion de esfuerzo normal en toda la barra
-            ecu = ((mfl-mic)/(bar.lar-0))*(cag.vrx-0) + mic
-            ecu += cag.mom
-            ecu = ecu.subs({cag.vrl:bar.lar})
+            # # indice de momento inicial y final
+            # nim = int(bar.nim)
+            # nfm = int(bar.nfm)
+
+            # # momento inicial y momento final
+            # mic = -float(bar.esf.loc[nim].iloc[0])
+            # mfl = float(bar.esf.loc[nfm].iloc[0])
+
+            # # ecuacion de esfuerzo normal en toda la barra
+            # ecu = ((mfl-mic)/(bar.lar-0))*(cag.vrx-0) + mic
+            # ecu += cag.mom
+            # ecu = ecu.subs({cag.vrl: bar.lar})
+        
+        for i in lba:
+            i.cal_mom()
+
+    # def grf_est(self):
+    #     gre = GrfEst()
+    #     gre.graficar()
+
+    # def grf_nor(self):
+    #     pass
+
+    # def grf_mom(self):
+    #     pass
+
+    # def grf_cor(self):
+    #     pass
+    
+    # def grf_des(self):
+    #     pass
