@@ -16,6 +16,10 @@ class Vinculo:
         self.ang = ang
         self.dax = float(nod.loc['cox'])
         self.day = float(nod.loc['coy'])
+        
+        # Punto pivot
+        self.xp = 0.5
+        self.yp = 1
 
     def print(self, ax, x=0, y=0, fi=0, c=1):
         """
@@ -39,18 +43,16 @@ class Vinculo:
         y = self.day
         fi = np.radians(self.ang)
 
-        # Punto pivot
-        xp, yp = (0.5, 1)
-
         # Crear transformación
         trans = Affine2D()
-        trans.translate(-xp, -yp)
+        trans.translate(-self.xp, -self.yp)
         trans.scale(c)
         trans.rotate(fi)
         trans.translate(x, y)
 
         # Aplicar transformación y agregar al eje
         self.grafica = deepcopy(self.path)
+        self.grafica.set_zorder(10)
 
         self.grafica.set_transform(trans + ax.transData)
         ax.add_collection(self.grafica)
@@ -149,6 +151,8 @@ class ViculoPri(Vinculo):
 class viculoTer(Vinculo):
     def __init__(self, nod, ang):
         super().__init__(nod, ang)
+        self.xp = 0.5
+        self.yp = 0
 
         # Segundo triángulo desplazado
         verts2 = np.array([[-0.25, 0], [1.25, 0]])

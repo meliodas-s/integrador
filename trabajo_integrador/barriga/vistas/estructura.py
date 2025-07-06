@@ -27,7 +27,7 @@ class GrfEst(Grafica):
         for so in self.lso:
             so.print(ax)
 
-        self.configraf(ax, 0.5, '', -4, 25, -4, 5, fig, 1)
+        self.configraf(ax, 0.5, '', -4, 25, -4, 10, fig, 1)
 
     def muestra(self):
         plt.show()

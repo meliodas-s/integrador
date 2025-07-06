@@ -52,7 +52,7 @@ class Rock():
             case 2:
                 self.lso.append(ViculoSeg(self.ini.loc[nod], ang))
             case 3:
-                self.lso.append(ViculoSeg(self.ini.loc[nod], ang))
+                self.lso.append(viculoTer(self.ini.loc[nod], ang))
 
             
 
@@ -269,7 +269,8 @@ class Rock():
         gre.muestra()
 
     def grf_mom(self):
-        grm = GrfMom(self.lba, self.lso)
+        grm = GrfMom(self.lba, self.lso, 1/10000)
+        grm.cargado()
         grm.graficar()
         grm.muestra()
 
