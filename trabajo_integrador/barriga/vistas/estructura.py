@@ -2,12 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from ..modelos.barra import Barra
 from .grafica import Grafica
+from ..modelos.config import Conf
 
 
 class GrfEst(Grafica):
-    def __init__(self, lba: list[Barra], lso):
+    def __init__(self, lba: list[Barra], lso, conf:Conf):
         self.lba = lba
         self.lso = lso
+        self.con = conf
 
     def graficar(self):
         # lienzo
@@ -27,7 +29,19 @@ class GrfEst(Grafica):
         for so in self.lso:
             so.print(ax)
 
-        self.configraf(ax, 0.5, '', -4, 25, -4, 10, fig, 1)
+        tit = 'Estructura'
+        self.configraf(
+            ax, 
+            0.5,
+            tit, 
+            self.con.xmin, 
+            self.con.xmax,
+            self.con.ymin,
+            self.con.ymax,
+            fig,
+            1,
+            'x[m]',
+            'y[m]')
 
     def muestra(self):
         plt.show()

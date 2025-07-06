@@ -8,6 +8,7 @@ from .modelos.barra import Barra
 from .modelos.carga import Carga
 from .vistas.estructura import GrfEst
 from .vistas.esfuerzo import GrfMom
+from .modelos.config import Conf
 
 # soportes
 from .modelos.soportes import ViculoSeg, ViculoPri, viculoTer
@@ -16,7 +17,6 @@ from .modelos.soportes import ViculoSeg, ViculoPri, viculoTer
 from rich.console import Console
 from rich.table import Table
 from rich.markdown import Markdown
-
 
 
 class Rock():
@@ -34,9 +34,10 @@ class Rock():
         columnas: (número de nodo, índice de momento, índice de fuerza en x,
         índice de fuerza en y).
     '''
+
     def cre_sop(self, soi):
         '''Funcion encargada de crear soporte
-        
+
         Parameters
         ----------
         soi : list
@@ -54,15 +55,15 @@ class Rock():
             case 3:
                 self.lso.append(viculoTer(self.ini.loc[nod], ang))
 
-            
+    def __init__(self, inc, iba, ino, car, sop, conf, pri=False):
 
-    def __init__(self, inc, iba, ino, car, sop, pri=False):
+        # input de config
+        self.conf = Conf(*conf)
 
         # Input de cargas
         cgs: list[Carga] = []
         for i in car:
             cgs.append(Carga(i[0], i[1], i[2]))
-        
 
         # Input fuerzas e incognitas (encognitas)
         ncc = ['fue', 'des']
@@ -245,7 +246,7 @@ class Rock():
 
             # barra en cuestion
             bar = lba[iba-1]
-            
+
             match cag.tip:
                 case 1:
                     bar.cav = cag
@@ -259,17 +260,17 @@ class Rock():
             i.cal_mom()
             i.cal_cor()
             i.cal_nor()
-            
+
         # se guardan las barras en el objeto Rock
         self.lba = lba
 
     def grf_est(self):
-        gre = GrfEst(self.lba, self.lso)
+        gre = GrfEst(self.lba, self.lso, self.conf)
         gre.graficar()
         gre.muestra()
 
     def grf_mom(self):
-        grm = GrfMom(self.lba, self.lso, 1/10000)
+        grm = GrfMom(self.lba, self.lso, self.conf)
         grm.cargado()
         grm.graficar()
         grm.muestra()
@@ -277,9 +278,8 @@ class Rock():
     # def grf_nor(self):
     #     pass
 
-
     # def grf_cor(self):
     #     pass
-    
+
     # def grf_des(self):
     #     pass

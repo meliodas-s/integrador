@@ -1,9 +1,11 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.axes._axes import Axes
 
 class Grafica:
     pass
 
-    def configraf(self, ax, spcmin, tit, mix, max, miy, may, fig, spc):
+    def configraf(self, ax:Axes, spcmin, tit, mix, max, miy, may, fig, spc, xlb, ylb):
         '''Me configura y grafica la grafica'''
 
         # Configuraciones para figura
@@ -33,8 +35,14 @@ class Grafica:
         # Miselaneos
         ax.set_ylim(miy, may)
         ax.set_xlim(mix, max)
+        ax.set_xlabel(xlb)
+        ax.set_ylabel(ylb)
         ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
         ax.set_title(tit)
         ax.set_facecolor('#EACEC4')
         ax.set_axisbelow(True)
         fig.patch.set_facecolor('#EACEC4')
+        
+        # eliminar etiquetas duplicadas
+        handles, labels = ax.get_legend_handles_labels()
+        ax.legend(dict(zip(labels, handles)).values(), dict(zip(labels, handles)).keys())

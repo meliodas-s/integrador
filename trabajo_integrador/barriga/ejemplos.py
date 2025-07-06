@@ -158,5 +158,11 @@ ejemplo2 = {
         [3, 3, 0],
         [3, 6, 0],
         [1, 4, 0],
+    ],
+    
+    # configuraciones
+    'con' : [
+        # xmin, xmax, ymin, ymax, escm, escq, escn
+        -3, 25, -2, 15, 1/15000, 1/5000, 1/5000
     ]
 }
