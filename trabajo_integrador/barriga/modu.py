@@ -7,6 +7,7 @@ from IPython.display import display
 from .modelos.barra import Barra
 from .modelos.carga import Carga
 from .vistas.estructura import GrfEst
+from .vistas.esfuerzo import GrfMom
 
 # soportes
 from .modelos.soportes import ViculoSeg, ViculoPri, viculoTer
@@ -265,12 +266,16 @@ class Rock():
     def grf_est(self):
         gre = GrfEst(self.lba, self.lso)
         gre.graficar()
+        gre.muestra()
+
+    def grf_mom(self):
+        grm = GrfMom(self.lba, self.lso)
+        grm.graficar()
+        grm.muestra()
 
     # def grf_nor(self):
     #     pass
 
-    # def grf_mom(self):
-    #     pass
 
     # def grf_cor(self):
     #     pass

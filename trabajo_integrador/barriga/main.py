@@ -17,3 +17,4 @@ sop = ejemplo['sop']
 acdc = Rock(inc, iba, ino, car, sop,pri=True)
 
 acdc.grf_est()
+acdc.grf_mom()

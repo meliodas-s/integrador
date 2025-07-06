@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from ..modelos.barra import Barra
+from .grafica import Grafica
 
 
-class GrfEst:
+class GrfEst(Grafica):
     def __init__(self, lba: list[Barra], lso):
         self.lba = lba
         self.lso = lso
@@ -11,58 +12,25 @@ class GrfEst:
     def graficar(self):
         # lienzo
         fig, ax = plt.subplots()
-
+        self.fig = fig
+        self.axe = ax
         # barras
         for i in self.lba:
             ax.plot(
-                [i.xin, i.xfi], [i.yin,i.yfi],
+                [i.xin, i.xfi], [i.yin, i.yfi],
                 linewidth=2,
                 color='gray',
                 alpha=0.9
             )
-        
+
         # soporte
         for so in self.lso:
             so.print(ax)
-        
+
         self.configraf(ax, 0.5, '', -4, 25, -4, 5, fig, 1)
+
+    def muestra(self):
         plt.show()
 
-    def configraf(self, ax, spcmin, tit, mix, max, miy, may, fig, spc):
-        '''Me configura y grafica la grafica'''
-
-        # Configuraciones para figura
-        ax.legend()
-        ax.set_aspect('equal')
-        ax.set_xticks(np.arange(mix, max, spc))
-        ax.set_yticks(np.arange(miy, may, spc))
-        ax.set_xticks(np.arange(mix, max, spcmin), minor=True)
-        ax.set_yticks(np.arange(miy, may, spcmin), minor=True)
-
-        # Grid menores
-        ax.grid(
-            True,
-            which='major',
-            linestyle='-',
-            linewidth=0.5,
-            alpha=0.5,
-            color='black')
-        ax.grid(
-            True,
-            which='minor',
-            linestyle='--',
-            linewidth=0.4,
-            alpha=0.5,
-            color='black')
-
-        # Miselaneos
-        ax.set_ylim(miy, may)
-        ax.set_xlim(mix, max)
-        ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-        ax.set_title(tit)
-        ax.set_facecolor('#EACEC4')
-        ax.set_axisbelow(True)
-        fig.patch.set_facecolor('#EACEC4')
-    
     def transformar(self):
         pass
