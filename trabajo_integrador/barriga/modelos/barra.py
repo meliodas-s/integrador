@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from .carga import Carga0
 import numpy as np
-
+import sympy as sp
 
 @dataclass
 class Barra:
@@ -34,11 +34,13 @@ class Barra:
     rig : np.array
         Matriz de rigidez.
 
-    nim : int
-        Índice global asociado al momento en el nodo inicial.
-
     nix : int
-        Índice global asociado a la fuerza en X en el nodo inicial.
+nfx  Índice global asociado al momento en el nodo inicial.
+
+    nix : nt
+
+    niy : int
+        Índice global asociado        ecu.subs({}) a la fuerza en X en el nodo inicial.
 
     niy : int
         Índice global asociado a la fuerza en Y en el nodo inicial.
@@ -91,6 +93,9 @@ class Barra:
     
     # almacena todos los esfuerzos cordenadas locales
     esf = 0
+    
+    # variables
+    vrx = sp.symbols('x')
 
     def cal_lmx(self):
         self.lmx = (self.xfi-self.xin)/self.lar
@@ -142,9 +147,6 @@ class Barra:
     def cal_lar(self):
         self.lar = np.sqrt((self.xfi-self.xin)**2+(self.yfi-self.yin)**2)
 
-    def cal_cor(self):
-        pass
-
     def cal_mom(self):
         '''Crea la funcion del esfuerzo de momento.
         Solo habra dos casos en estos ejemplos, o tiene una carga triangular
@@ -156,28 +158,50 @@ class Barra:
             nfm = int(self.nfm)
 
             # momento inicial y momento final
+            print(f'Barr {self.bar}')
             mic = -float(self.esf.loc[nim].iloc[0])
             mfl = float(self.esf.loc[nfm].iloc[0])
 
             # ecuacion de esfuerzo normal en toda la selfra
             ecu = ((mfl-mic)/(self.lar-0))*(self.cav.vrx-0) + mic
+            print(f'    Recta: {ecu}')
             ecu += self.cav.mom
             ecu = ecu.subs({self.cav.vrl: self.lar})
             self.mom = ecu
-            print(self.mom)
+            print(f'    Momento : {self.mom}')
         else:
+            print(f'Barr {self.bar}')
             # tiene una carga triangular
             nim = int(self.nim)
             nfm = int(self.nfm)
 
             mic = -float(self.esf.loc[nim].iloc[0])
             mfl = float(self.esf.loc[nfm].iloc[0])
+            print(f'    mfl: {mfl}, mic: {mic}')
 
             ecu = ((mfl-mic)/(self.lar-0))*(self.cat.vrx-0) + mic
+            print(f'    Recta: {ecu}')
             ecu += self.cat.mom
             ecu = ecu.subs({self.cat.vrl: self.lar})
             self.mom = ecu
-            print(self.mom)
+            print(f'    Momento : {self.mom}')
+
+    def cal_cor(self):
+        self.cor = sp.diff(self.mom, self.vrx)
+        print(f'    Cortante : {self.cor}')
 
     def cal_nor(self):
+        # indice de momento inicial y final
+        nix = int(self.nix)
+        nfx = int(self.nfx)
+
+        # momento inicial y momento final
+        mic = -float(self.esf.loc[nix].iloc[0])
+        mfl = float(self.esf.loc[nfx].iloc[0])
+
+        # ecuacion de esfuerzo normal en toda la selfra
+        ecu = ((mfl-mic)/(self.lar-0))*(self.cav.vrx-0) + mic
+        ecu = ecu.subs({self.cav.vrl: self.lar})
+        self.nor = ecu
+        print(f'    Normal : {ecu}')
         pass

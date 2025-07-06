@@ -6,8 +6,16 @@ import sympy as sp
 from IPython.display import display
 from .modelos.barra import Barra
 from .modelos.carga import Carga
-
 from .vistas.estructura import GrfEst
+
+# soportes
+from .modelos.soportes import ViculoSeg, ViculoPri, viculoTer
+
+# Impresion
+from rich.console import Console
+from rich.table import Table
+from rich.markdown import Markdown
+
 
 
 class Rock():
@@ -25,13 +33,35 @@ class Rock():
         columnas: (número de nodo, índice de momento, índice de fuerza en x,
         índice de fuerza en y).
     '''
+    def cre_sop(self, soi):
+        '''Funcion encargada de crear soporte
+        
+        Parameters
+        ----------
+        soi : list
+            soporte individual a crearse y guardarse.
+        '''
 
-    def __init__(self, inc, iba, ino, car, pri=False):
+        tip = soi[0]
+        nod = soi[1]
+        ang = soi[2]
+        match tip:
+            case 1:
+                self.lso.append(ViculoPri(self.ini.loc[nod], ang))
+            case 2:
+                self.lso.append(ViculoSeg(self.ini.loc[nod], ang))
+            case 3:
+                self.lso.append(ViculoSeg(self.ini.loc[nod], ang))
+
+            
+
+    def __init__(self, inc, iba, ino, car, sop, pri=False):
 
         # Input de cargas
         cgs: list[Carga] = []
         for i in car:
             cgs.append(Carga(i[0], i[1], i[2]))
+        
 
         # Input fuerzas e incognitas (encognitas)
         ncc = ['fue', 'des']
@@ -47,15 +77,18 @@ class Rock():
 
         # Input nodos cambiando indice
         ini = ino.set_index('nod')
+        self.ini = ini
 
-        # Cantidad de nodos
-        can = ini.shape[0]
+        # Input de soportes
+        self.lso = list()
+        for i in sop:
+            self.cre_sop(i)
 
         # Cantidad de libertades
-        lib = can*3
+        can = inc.shape[0]
 
         # Numeracion del 1 al n(numero de libertades)
-        nli = np.arange(1, lib+1)
+        nli = np.arange(1, can+1)
 
         # Crear data-frame de rigidez
         rig = pd.DataFrame(0, index=nli, columns=nli).astype(float)
@@ -105,7 +138,7 @@ class Rock():
 
         if pri:
             hlp.col("Matriz de rigidez")
-            display(rgs.evalf(5))
+            print(rig.to_string())
 
         # Defino Matrizes de Desplaza e Incog.(fuerzas)
         mde = sp.Matrix()
@@ -146,8 +179,13 @@ class Rock():
 
         # Imprimiendo
         if pri:
+            hlp.col("Matriz de Fuerzas:")
+            sp.pprint(min)
+
+        # Imprimiendo
+        if pri:
             hlp.col("Matriz de desplazamiento:")
-            display(mde)
+            sp.pprint(mde)
 
         # Cargo eqs con los items de res
         for idx in range(res.rows):
@@ -159,7 +197,7 @@ class Rock():
 
         if pri:
             hlp.col("Soluciones:")
-            display(sp.Eq(
+            sp.pprint(sp.Eq(
                 sp.Matrix(list(sol.keys())),
                 sp.Matrix(list(sol.values())))
             )
@@ -191,7 +229,7 @@ class Rock():
 
             if pri:
                 hlp.col(f"Fuerza en barra {ib.bar}")
-                display(esf)
+                sp.pprint(esf)
 
             # guardo los valores
             ib.esf = esf
@@ -203,7 +241,6 @@ class Rock():
 
             # indice de barra
             iba = cag.bar
-            print(cag)
 
             # barra en cuestion
             bar = lba[iba-1]
@@ -216,25 +253,18 @@ class Rock():
                 case 3:
                     bar.cat = cag
 
-            # # indice de momento inicial y final
-            # nim = int(bar.nim)
-            # nfm = int(bar.nfm)
-
-            # # momento inicial y momento final
-            # mic = -float(bar.esf.loc[nim].iloc[0])
-            # mfl = float(bar.esf.loc[nfm].iloc[0])
-
-            # # ecuacion de esfuerzo normal en toda la barra
-            # ecu = ((mfl-mic)/(bar.lar-0))*(cag.vrx-0) + mic
-            # ecu += cag.mom
-            # ecu = ecu.subs({cag.vrl: bar.lar})
-        
         for i in lba:
+            # se calculan los momentos
             i.cal_mom()
+            i.cal_cor()
+            i.cal_nor()
+            
+        # se guardan las barras en el objeto Rock
+        self.lba = lba
 
-    # def grf_est(self):
-    #     gre = GrfEst()
-    #     gre.graficar()
+    def grf_est(self):
+        gre = GrfEst(self.lba, self.lso)
+        gre.graficar()
 
     # def grf_nor(self):
     #     pass

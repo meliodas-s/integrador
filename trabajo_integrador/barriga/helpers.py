@@ -13,6 +13,12 @@ def mrb(bar, rig: pd.DataFrame):
 
     # Convierto (k) en df para coincidencia de indices.
     mrg = pd.DataFrame(bar.rig, index=fid, columns=cid)
+    
+    if True:
+            col(f"Matriz de B{bar.bar}")
+            print(mrg.to_string())
+            print(bar.lar)
+
 
     # Sumar los valores nuevos a la submatriz original
     sum = rig.loc[fid, cid].values + mrg
