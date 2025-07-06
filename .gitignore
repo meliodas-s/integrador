@@ -24,3 +24,5 @@ env/
 
 # Archivos personales o secretos
 .env
+
+to-do.txt

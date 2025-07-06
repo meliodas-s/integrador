@@ -1,7 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from .carga import Carga0
 import numpy as np
 import sympy as sp
+
 
 @dataclass
 class Barra:
@@ -35,7 +36,7 @@ class Barra:
         Matriz de rigidez.
 
     nix : int
-nfx  Índice global asociado al momento en el nodo inicial.
+    nfx  Índice global asociado al momento en el nodo inicial.
 
     nix : nt
 
@@ -90,12 +91,16 @@ nfx  Índice global asociado al momento en el nodo inicial.
     cav = Carga0()
     cah = Carga0()
     cat = Carga0()
-    
+
     # almacena todos los esfuerzos cordenadas locales
     esf = 0
-    
+
     # variables
     vrx = sp.symbols('x')
+    
+    # matriz de rigidez local y global
+    ril:np.ndarray = field(default_factory=lambda: np.zeros((6, 6)))
+    rig:np.ndarray = field(default_factory=lambda: np.zeros((6, 6)))
 
     def cal_lmx(self):
         self.lmx = (self.xfi-self.xin)/self.lar

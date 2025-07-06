@@ -16,7 +16,7 @@ class Grafica:
         ax.set_xticks(np.arange(mix, max, spcmin), minor=True)
         ax.set_yticks(np.arange(miy, may, spcmin), minor=True)
 
-        # Grid menores
+        # grid menores
         ax.grid(
             True,
             which='major',

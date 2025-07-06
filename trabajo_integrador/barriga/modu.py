@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from . import helpers as hlp
 import sympy as sp
-from IPython.display import display
 from .modelos.barra import Barra
 from .modelos.carga import Carga
 from .vistas.estructura import GrfEst
@@ -12,11 +11,6 @@ from .modelos.config import Conf
 
 # soportes
 from .modelos.soportes import ViculoSeg, ViculoPri, viculoTer
-
-# Impresion
-from rich.console import Console
-from rich.table import Table
-from rich.markdown import Markdown
 
 
 class Rock():
@@ -55,7 +49,16 @@ class Rock():
             case 3:
                 self.lso.append(viculoTer(self.ini.loc[nod], ang))
 
-    def __init__(self, inc, iba, ino, car, sop, conf, pri=False):
+    def __init__(
+        self,
+        inc: list,
+        iba: list,
+        ino: list,
+        car: list,
+        sop: list,
+        conf: list,
+        pri=False
+    ):
 
         # input de config
         self.conf = Conf(*conf)
@@ -95,17 +98,17 @@ class Rock():
         # Crear data-frame de rigidez
         rig = pd.DataFrame(0, index=nli, columns=nli).astype(float)
 
-        # Lista de barras
+        # lista de barras
         lba: list[Barra] = []
 
-        # Merge de datos
+        # merge de datos
         for idx, fil in iba.iterrows():
 
-            # Nodos que conectan a esa barra
+            # nodos que conectan a esa barra
             noi = fil['noi']
             nof = fil['nof']
 
-            # Creo una nueva barra
+            # creo una nueva barra
             lba.append(
                 Barra(
                     int(fil['bar']),
@@ -132,28 +135,28 @@ class Rock():
             lba[idx].cal_ril()
             lba[idx].cal_rig()
 
-            # Agrego los esfuerzos a esta barra
+            # agrego los esfuerzos a esta barra
             hlp.mrb(lba[idx], rig)
 
-        # Se crea matriz symbolica rigSimbolica
+        # se crea matriz symbolica rigSimbolica
         rgs = sp.Matrix(rig.values)
 
         if pri:
             hlp.col("Matriz de rigidez")
             print(rig.to_string())
 
-        # Defino Matrizes de Desplaza e Incog.(fuerzas)
+        # defino matrizes de Desplaza e Incog.(fuerzas)
         mde = sp.Matrix()
         min = sp.Matrix()
 
-        # Defino Incog. Simbolicas de Desplaza y Fuerzas
+        # defino incog. simbolicas de Desplaza y Fuerzas
         isd = sp.Matrix()
         isf = sp.Matrix()
 
-        # Incognitas totales
+        # incognitas totales
         igt = []
 
-        # Se crean los datos de las incognitas
+        # se crean los datos de las incognitas
         for idx, fil in inc.iterrows():
             if not fil['des']:
                 fue = sp.symbols(f'Q_{idx + 1}')
@@ -175,21 +178,21 @@ class Rock():
                 isf = isf.col_join(sp.Matrix([fil['fue']]))
                 igt.append(des)
 
-        # Matriz resultante de incognitas
+        # matriz resultante de incognitas
         res = rgs * mde
         eqs = []
 
-        # Imprimiendo
+        # imprimiendo
         if pri:
             hlp.col("Matriz de Fuerzas:")
             sp.pprint(min)
 
-        # Imprimiendo
+        # imprimiendo
         if pri:
             hlp.col("Matriz de desplazamiento:")
             sp.pprint(mde)
 
-        # Cargo eqs con los items de res
+        # cargo eqs con los items de res
         for idx in range(res.rows):
             eqs.append(sp.Eq(min[idx], res[idx]))
 
@@ -204,10 +207,10 @@ class Rock():
                 sp.Matrix(list(sol.values())))
             )
 
-        # Defino la matriz de soluciones
+        # defino la matriz de soluciones
         self.ret = dict()
 
-        # Consigo los valores de las fuerzas en las barras
+        # consigo los valores de las fuerzas en las barras
         for ib in lba:
 
             # desplazamiento de los nodos en x e y
