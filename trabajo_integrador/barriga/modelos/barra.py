@@ -101,6 +101,9 @@ class Barra:
     # matriz de rigidez local y global
     ril:np.ndarray = field(default_factory=lambda: np.zeros((6, 6)))
     rig:np.ndarray = field(default_factory=lambda: np.zeros((6, 6)))
+    
+    # matriz de rigidez global indexada
+    rgi = None
 
     def cal_lmx(self):
         self.lmx = (self.xfi-self.xin)/self.lar

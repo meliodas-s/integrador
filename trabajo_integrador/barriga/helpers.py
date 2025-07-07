@@ -1,6 +1,7 @@
 import pandas as pd
+from .modelos.barra import Barra
 
-def mrb(bar, rig: pd.DataFrame):
+def mrb(bar:Barra, rig: pd.DataFrame):
     '''Carga la matriz de rigiddez para cada barra.
     Dada la barra y la matriz de rigidez suma sus respectivo
     aporte en cada pocision.
@@ -14,11 +15,8 @@ def mrb(bar, rig: pd.DataFrame):
     # Convierto (k) en df para coincidencia de indices.
     mrg = pd.DataFrame(bar.rig, index=fid, columns=cid)
     
-    if True:
-            col(f"Matriz de B{bar.bar}")
-            print(mrg.to_string())
-            print(bar.lar)
-
+    # guarda la matriz indexda
+    bar.rgi = mrg
 
     # Sumar los valores nuevos a la submatriz original
     sum = rig.loc[fid, cid].values + mrg

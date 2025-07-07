@@ -166,10 +166,6 @@ class Rock():
         self.rig = rig
         rgs = sp.Matrix(rig.values)
 
-        # if pri:
-        #     hlp.col("Matriz de rigidez")
-        #     print(rig.to_string())
-
         # defino matrizes de Desplaza e Incog.(fuerzas)
         mde = sp.Matrix()
         min = sp.Matrix()
@@ -211,16 +207,6 @@ class Rock():
         res = rgs * mde
         eqs = []
 
-        # # imprimiendo
-        # if pri:
-        #     hlp.col("Matriz de Fuerzas:")
-        #     sp.pprint(min)
-
-        # # imprimiendo
-        # if pri:
-        #     hlp.col("Matriz de desplazamiento:")
-        #     sp.pprint(mde)
-
         # cargo eqs con los items de res
         for idx in range(res.rows):
             eqs.append(sp.Eq(min[idx], res[idx]))
@@ -238,10 +224,6 @@ class Rock():
             sp.Matrix(list(sol.keys())),
             sp.Matrix(list(sol.values()))
         )
-
-        # if pri:
-        #     hlp.col("Soluciones:")
-        #     sp.pprint(self.ecu)
 
         # consigo los valores de las fuerzas en las barras
         for ib in lba:
@@ -264,10 +246,6 @@ class Rock():
             # cálculo del esfuerzo de la barra
             esf = (ib.ril@ib.tra)@vde
             esf = pd.DataFrame(esf, index=den, columns=[f'{ib.bar}'])
-
-            # if pri:
-            #     hlp.col(f"Fuerza en barra {ib.bar}")
-            #     sp.pprint(esf)
 
             # guardo los valores
             ib.esf = esf
@@ -297,29 +275,31 @@ class Rock():
 
         # se guardan las barras en el objeto Rock
         self.lba = lba
-        
+
         if pri:
             self.imprimi()
-    
+
     def imprimi(self):
-        
+
         hlp.col("Matriz de rigidez")
         print(self.rig.to_string())
 
         hlp.col("Matriz de Fuerzas:")
         sp.pprint(self.min)
-        
+
         hlp.col("Matriz de desplazamiento:")
         sp.pprint(self.mde)
-        
+
         hlp.col("Soluciones:")
         sp.pprint(self.ecu)
-        
+
         for i in self.lba:
-                hlp.col(f"Fuerza en barra {i.bar}")
-                sp.pprint(i.esf)
-        
-        pass
+            hlp.col(f"Barra: {i.bar}")
+            hlp.col(f"Matriz sistema global:")
+            print(i.rgi.to_string())
+            
+            hlp.col(f"Esfuerzos:")
+            sp.pprint(i.esf)
 
     def grf_est(self):
         gre = GrfEst(self.lba, self.lso, self.conf)
