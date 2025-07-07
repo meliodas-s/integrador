@@ -1,4 +1,5 @@
 from .modu import Rock
+from .control.impresion import Impresion
 import matplotlib.pyplot as plt
 from plottable import Table
 import pandas as pd
@@ -29,3 +30,5 @@ acdc = Rock(inc, iba, ino, car, sop,con,pri=True)
 
 acdc.grf_est()
 acdc.grf_mom()
+acdc.grf_cor()
+acdc.grf_nor()

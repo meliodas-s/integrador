@@ -2,10 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.axes._axes import Axes
 
+
 class Grafica:
     pass
 
-    def configraf(self, ax:Axes, spcmin, tit, mix, max, miy, may, fig, spc, xlb, ylb):
+    def configraf(self, ax: Axes, spcmin, tit, mix, max, miy, may, fig, spc, xlb, ylb):
         '''Me configura y grafica la grafica'''
 
         # Configuraciones para figura
@@ -42,7 +43,20 @@ class Grafica:
         ax.set_facecolor('#EACEC4')
         ax.set_axisbelow(True)
         fig.patch.set_facecolor('#EACEC4')
-        
+
         # eliminar etiquetas duplicadas
         handles, labels = ax.get_legend_handles_labels()
-        ax.legend(dict(zip(labels, handles)).values(), dict(zip(labels, handles)).keys())
+        ax.legend(
+            dict(zip(labels, handles)).values(),
+            dict(zip(labels, handles)).keys()
+        )
+        
+    def guardar(self, fig,nombre):
+        fig.set_size_inches(20, 20)
+        fig.savefig(
+            nombre,
+            dpi=350,
+            bbox_inches='tight',
+            pad_inches=0.2,
+            format='pdf',
+        )
