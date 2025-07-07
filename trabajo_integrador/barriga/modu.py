@@ -86,6 +86,9 @@ class Rock():
 
         # ecuaciond e igualdades, incognitas
         self.ecu = None
+        
+        # cantidad de barras
+        self.can = None
 
         # Input de cargas
         cgs: list[Carga] = []
@@ -99,6 +102,7 @@ class Rock():
         # Input barras
         bac = ['bar', 'noi', 'nof', 'are', 'mod', 'ine']
         iba = pd.DataFrame(iba, columns=bac)
+        self.can = iba.shape[0]
 
         # Input nodos
         noc = ['nod', 'imn', 'ifx', 'ify', 'cox', 'coy']

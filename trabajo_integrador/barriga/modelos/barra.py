@@ -166,37 +166,30 @@ class Barra:
             nfm = int(self.nfm)
 
             # momento inicial y momento final
-            print(f'Barr {self.bar}')
             mic = -float(self.esf.loc[nim].iloc[0])
             mfl = float(self.esf.loc[nfm].iloc[0])
 
             # ecuacion de esfuerzo normal en toda la selfra
             ecu = ((mfl-mic)/(self.lar-0))*(self.cav.vrx-0) + mic
-            print(f'    Recta: {ecu}')
             ecu += self.cav.mom
             ecu = ecu.subs({self.cav.vrl: self.lar})
             self.mom = ecu
-            print(f'    Momento : {self.mom}')
+
         else:
-            print(f'Barr {self.bar}')
             # tiene una carga triangular
             nim = int(self.nim)
             nfm = int(self.nfm)
 
             mic = -float(self.esf.loc[nim].iloc[0])
             mfl = float(self.esf.loc[nfm].iloc[0])
-            print(f'    mfl: {mfl}, mic: {mic}')
 
             ecu = ((mfl-mic)/(self.lar-0))*(self.cat.vrx-0) + mic
-            print(f'    Recta: {ecu}')
             ecu += self.cat.mom
             ecu = ecu.subs({self.cat.vrl: self.lar})
             self.mom = ecu
-            print(f'    Momento : {self.mom}')
 
     def cal_cor(self):
         self.cor = sp.diff(self.mom, self.vrx)
-        print(f'    Cortante : {self.cor}')
 
     def cal_nor(self):
         # indice de momento inicial y final
@@ -211,5 +204,3 @@ class Barra:
         ecu = ((mfl-mic)/(self.lar-0))*(self.cav.vrx-0) + mic
         ecu = ecu.subs({self.cav.vrl: self.lar})
         self.nor = ecu
-        print(f'    Normal : {ecu}')
-        pass
