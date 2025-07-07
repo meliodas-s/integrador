@@ -52,10 +52,10 @@ class Grafica:
         )
         
     def guardar(self, fig,nombre):
-        fig.set_size_inches(20, 20)
+        fig.set_size_inches(15, 15)
         fig.savefig(
             nombre,
-            dpi=350,
+            dpi=300,
             bbox_inches='tight',
             pad_inches=0.2,
             format='pdf',

@@ -11,6 +11,8 @@ from scipy.signal import argrelextrema
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from typing import Optional
+from adjustText import adjust_text
+from copy import deepcopy
 
 
 class GrfEsf(Grafica):
@@ -22,11 +24,13 @@ class GrfEsf(Grafica):
         self.est = GrfEst(self.lba, self.lso, con)
         self.tgr = []
         self.tit = ""
-        self.axe:Optional[Axes] = None
-        self.fig:Optional[Figure] = None
+        self.axe: Optional[Axes] = None
+        self.fig: Optional[Figure] = None
+        self.txs: Optional[list] = list()
+        self.ctx: Optional[list] = list()
 
     def graficar(self):
-        self.est.graficar()
+        self.est.graficar(False)
         self.axe = self.est.axe
         self.fig = self.est.fig
         vrx = sp.symbols('x')
@@ -53,22 +57,66 @@ class GrfEsf(Grafica):
             )
 
             # graficar minimos maximos y ceros
-            self.grafmax(self.axe, x_vals, y_vals, i[2])
-
-            # configurar grafica
-            self.configraf(
+            self.grafmax(
                 self.axe,
-                0.5,
-                self.tit,
-                self.con.xmin,
-                self.con.xmax,
-                self.con.ymin,
-                self.con.ymax,
-                self.fig,
-                1,
-                'x[m]',
-                'y[m]'
+                np.round(x_vals, 4),
+                np.round(y_vals, 4),
+                i[2])
+
+        x = list()
+        y = list()
+        for i in self.ctx:
+            x.append(i[0])
+            y.append(i[1])
+
+        # creo copia y ajusto el texto
+        adjust_text(
+            self.txs,
+            x=x,
+            y=y,
+            expand=(1.5, 3),
+            expand_text=(2, 3),
+            expand_points=(1, 2),
+            force_text=(0.4, 0.9),
+            force_points=(0.1, 0.4)
+        )
+
+        # Dibujar manualmente las flechas desde el texto movido al punto original
+        for i, txt in enumerate(self.txs):
+            # Coordenadas del texto ajustado
+            xt, yt = txt.get_position()
+
+            # Coordenadas originales
+            xo, yo = self.ctx[i]
+
+            # Dibujar la flecha
+            self.axe.annotate(
+                "",
+                zorder=40,
+                xy=(xo, yo),
+                xytext=(xt, yt),
+                arrowprops=dict(
+                    arrowstyle="->",
+                    color="black",
+                    lw=0.8,
+                    alpha=0.7
+                )
             )
+
+        # configurar grafica
+        self.configraf(
+            self.axe,
+            0.5,
+            self.tit,
+            self.con.xmin,
+            self.con.xmax,
+            self.con.ymin,
+            self.con.ymax,
+            self.fig,
+            1,
+            'x[m]',
+            'y[m]'
+        )
 
     def muestra(self):
         plt.show()
@@ -89,16 +137,14 @@ class GrfEsf(Grafica):
         return myt
 
     def grafmax(self, axe, xva, yva, tra):
-        fsz = 3
+        fsz = 8
         orderz = 20
         precis = 4
 
-        # Calculo minimo y maximo
+        # Calculo minimo, maximo y cerps
         orden = 5
         max_idx = argrelextrema(yva, np.greater, order=orden)[0]
         min_idx = argrelextrema(yva, np.less, order=orden)[0]
-
-        # Calculo de 0 (change sign)
         chs = np.where(np.diff(np.sign(yva)))[0]
 
         # Si tiene cero los grafica
@@ -111,23 +157,32 @@ class GrfEsf(Grafica):
                     chs2.append(i)
             chs = chs2
 
-            # Marcar minimo
-            x_t, y_t = tra.transform_point((xva[chs][0], yva[chs][0]))
-            axe.plot(x_t, y_t, 'bo', label='Ceros', markersize=1.5)
-            axe.text(
-                x_t,
-                y_t-0.01,
-                f"{xva[chs][0]:.{precis}}[m]",
-                color='black',
-                fontsize=fsz,
-                ha='center',
-                zorder=orderz,
-                bbox=dict(
-                    facecolor='green',
-                    alpha=0.4,
-                    edgecolor='none',
-                    boxstyle='round')
-            )
+            # graficar cada cero
+            for i in chs:
+                x_t, y_t = tra.transform_point((xva[i], yva[i]))
+                axe.plot(
+                    x_t,
+                    y_t,
+                    'bo',
+                    label='Ceros',
+                    markersize=1.5
+                )
+                txt = axe.text(
+                    x_t,
+                    y_t,
+                    f"{xva[i]:.{precis}}[m]",
+                    color='black',
+                    fontsize=fsz,
+                    ha='center',
+                    zorder=orderz,
+                    bbox=dict(
+                        facecolor='green',
+                        alpha=0.3,
+                        edgecolor='none',
+                        boxstyle='round')
+                )
+                self.txs.append(txt)
+                self.ctx.append(txt.get_position())
 
         # Si tiene min o max los grafica
         if min_idx.size != 0:
@@ -135,9 +190,9 @@ class GrfEsf(Grafica):
             # Marcar minimo
             x_t, y_t = tra.transform_point((xva[min_idx][0], yva[min_idx][0]))
             axe.plot(x_t, y_t, 'bo', label='Minimo', markersize=1.5)
-            axe.text(
+            txt = axe.text(
                 x_t,
-                y_t-0.01,
+                y_t,
                 f"{yva[min_idx][0]}",
                 color='black',
                 fontsize=fsz,
@@ -145,18 +200,20 @@ class GrfEsf(Grafica):
                 zorder=orderz,
                 bbox=dict(
                     facecolor='blue',
-                    alpha=0.4,
+                    alpha=0.3,
                     edgecolor='none',
                     boxstyle='round')
             )
+            self.txs.append(txt)
+            self.ctx.append(txt.get_position())
 
         if max_idx.size != 0:
             # Marcar máximo
             x_t, y_t = tra.transform_point((xva[max_idx][0], yva[max_idx][0]))
             axe.plot(x_t, y_t, 'ro', label='Maximo', markersize=1.5)
-            axe.text(
+            txt = axe.text(
                 x_t,
-                y_t-0.01,
+                y_t,
                 f"{yva[max_idx][0]:.{precis}}",
                 color='black',
                 fontsize=fsz,
@@ -164,10 +221,12 @@ class GrfEsf(Grafica):
                 zorder=orderz,
                 bbox=dict(
                     facecolor='red',
-                    alpha=0.4,
+                    alpha=0.3,
                     edgecolor='none',
                     boxstyle='round')
             )
+            self.txs.append(txt)
+            self.ctx.append(txt.get_position())
 
         # Letra de extemos offsets en x e y
         bbx = dict(
@@ -177,9 +236,9 @@ class GrfEsf(Grafica):
             boxstyle='round')
         if math.fabs(yva[-1]) > 10:
             x_t, y_t = tra.transform_point((xva[-1], yva[-1]))
-            axe.text(
+            txt = axe.text(
                 x_t,
-                y_t-0.01,
+                y_t,
                 f"{yva[-1]:.{precis}}",
                 color='black',
                 fontsize=fsz,
@@ -187,13 +246,15 @@ class GrfEsf(Grafica):
                 zorder=orderz,
                 bbox=bbx
             )
+            self.txs.append(txt)
+            self.ctx.append(txt.get_position())
 
         # Letra de extemos offsets en x e y
         if math.fabs(yva[0]) > 10:
             x_t, y_t = tra.transform_point((xva[0], yva[0]))
-            axe.text(
+            txt = axe.text(
                 x_t,
-                y_t-0.01,
+                y_t,
                 f"{yva[0]:.{precis}}",
                 color='black',
                 fontsize=fsz,
@@ -201,7 +262,8 @@ class GrfEsf(Grafica):
                 zorder=orderz,
                 bbox=bbx
             )
-
+            self.txs.append(txt)
+            self.ctx.append(txt.get_position())
 
 
 class GrfMom(GrfEsf):
@@ -210,9 +272,6 @@ class GrfMom(GrfEsf):
         self.tit = f'Momento $1[m]={self.con.escm:.4}[N\cdot m]$'
 
     def cargado(self):
-        # to_graf
-        self.tgr = list()
-
         for i in self.lba:
             tr = self.transfo(i, -self.con.escm)
             li = [i, i.mom, tr]
@@ -225,9 +284,6 @@ class GrfNor(GrfEsf):
         self.tit = f'Normal $1[m]={self.con.escn:.4}[N]$'
 
     def cargado(self):
-        # to_graf
-        self.tgr = list()
-
         for i in self.lba:
             tr = self.transfo(i, self.con.escm)
             li = [i, i.nor, tr]
@@ -240,9 +296,6 @@ class GrfCor(GrfEsf):
         self.tit = f'Cortante $1[m]={self.con.escq:.4}[N]$'
 
     def cargado(self):
-        # to_graf
-        self.tgr = list()
-
         for i in self.lba:
             tr = self.transfo(i, self.con.escm)
             li = [i, i.cor, tr]

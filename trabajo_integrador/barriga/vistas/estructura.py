@@ -11,7 +11,7 @@ class GrfEst(Grafica):
         self.lso = lso
         self.con = conf
 
-    def graficar(self):
+    def graficar(self, config=True):
         # lienzo
         fig, ax = plt.subplots()
         self.fig = fig
@@ -29,19 +29,20 @@ class GrfEst(Grafica):
         for so in self.lso:
             so.print(ax)
 
-        tit = 'Estructura'
-        self.configraf(
-            ax, 
-            0.5,
-            tit, 
-            self.con.xmin, 
-            self.con.xmax,
-            self.con.ymin,
-            self.con.ymax,
-            fig,
-            1,
-            'x[m]',
-            'y[m]')
+        if config:
+            tit = 'Estructura'
+            self.configraf(
+                ax, 
+                0.5,
+                tit, 
+                self.con.xmin, 
+                self.con.xmax,
+                self.con.ymin,
+                self.con.ymax,
+                fig,
+                1,
+                'x[m]',
+                'y[m]')
 
     def muestra(self):
         plt.show()
