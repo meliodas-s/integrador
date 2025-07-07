@@ -269,7 +269,7 @@ class GrfEsf(Grafica):
 class GrfMom(GrfEsf):
     def __init__(self, lba, lso, conf: Conf):
         super().__init__(lba, lso, conf)
-        self.tit = f'Momento $1[m]={self.con.escm:.4}[N\cdot m]$'
+        self.tit = f'Momento $1[m]={self.con.escm:.4}[N\\cdot m]$'
 
     def cargado(self):
         for i in self.lba:

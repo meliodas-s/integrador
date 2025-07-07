@@ -1,5 +1,6 @@
 from .modu import Rock
 from .control.impresion import Impresion
+from .control.verificado import Verificado
 import matplotlib.pyplot as plt
 from plottable import Table
 import pandas as pd
@@ -26,9 +27,22 @@ sop = ejemplo['sop']
 con = ejemplo['con']
 
 # Se crea la estructura
-acdc = Rock(inc, iba, ino, car, sop,con,pri=True)
+mod = Rock(inc, iba, ino, car, sop,con,pri=False)
 
-acdc.grf_est()
-acdc.grf_mom()
-acdc.grf_cor()
-acdc.grf_nor()
+mod.grf_est()
+mod.grf_mom()
+mod.grf_cor()
+mod.grf_nor()
+
+# modulo para imprimir matrices
+# imp = Impresion(mod)
+# imp.desp()
+# imp.fuer()
+# imp.rigi()
+# imp.incs()
+# imp.barr()
+# imp.barg()
+
+# modulo de verificado
+ver = Verificado(mod)
+ver.veri()

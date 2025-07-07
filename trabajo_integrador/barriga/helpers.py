@@ -58,6 +58,6 @@ def col(text: str, color: str='green'):
     }
 
     
-    print(f"{colors[color]}")
+    print(f"{styles['bold']}{colors[color]}",end='')
     print(text)
     print("\033[0m")

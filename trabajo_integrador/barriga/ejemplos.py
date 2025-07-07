@@ -163,6 +163,18 @@ ejemplo2 = {
     ]
 }
 
+# perfiles (todos los datos en m)
+upn80 = {
+    'ag':11e-4,
+    'ix':106e-8,
+    'sx':26.5e-5,
+    'tf':8e-3,
+    'qx':15.9
+}
+
+# modulo de elasticidad en N/m2
+mod= 21e3*(1e6)
+
 # estructura1 del tp
 ejemplo3 = {
     # Fuerzas
@@ -240,12 +252,12 @@ ejemplo3 = {
 
     ]    # bar,noi,nof,are,mod,iner (m, N)
     , 'iba': [
-        [1, 1, 9, 0.1, 2000, 0.1],
-        [2, 7, 11, 0.1, 2000, 0.1],
-        [3, 4, 5, 0.1, 2000, 0.1],
-        [4, 2, 8, 0.1, 2000, 0.1],
-        [5, 3, 10, 0.1, 2000, 0.1],
-        [6, 5, 6, 0.1, 2000, 0.1],
+        [1, 1, 9, 2*upn80['ag'], mod, 2*upn80['ix']],
+        [2, 7, 11, 2*upn80['ag'], mod, 2*upn80['ix']],
+        [3, 4, 5, 2*upn80['ag'], mod, 2*upn80['ix']],
+        [4, 2, 8, 2*upn80['ag'], mod, 2*upn80['ix']],
+        [5, 3, 10, 2*upn80['ag'], mod, 2*upn80['ix']],
+        [6, 5, 6, 2*upn80['ag'], mod, 2*upn80['ix']],
     ],
 
     # nod,imn,ifx,ify,cox,coy

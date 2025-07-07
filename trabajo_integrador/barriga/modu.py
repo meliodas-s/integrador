@@ -303,30 +303,30 @@ class Rock():
 
     def grf_est(self):
         gre = GrfEst(self.lba, self.lso, self.conf)
-        gre.graficar()
-        gre.guardar(gre.fig, 'gre.pdf')
-        gre.muestra()
+        # gre.graficar()
+        # gre.guardar(gre.fig, 'gre.png')
+        # gre.muestra()
 
     def grf_mom(self):
         grm = GrfMom(self.lba, self.lso, self.conf)
         grm.cargado()
-        grm.graficar()
-        grm.guardar(grm.fig, 'grm.pdf')
-        grm.muestra()
+        # grm.graficar()
+        # grm.guardar(grm.fig, 'grm.png')
+        # grm.muestra()
 
     def grf_nor(self):
         grn = GrfNor(self.lba, self.lso, self.conf)
         grn.cargado()
-        grn.graficar()
-        grn.guardar(grn.fig, 'grn.pdf')
-        grn.muestra()
+        # grn.graficar()
+        # grn.guardar(grn.fig, 'grn.png')
+        # grn.muestra()
 
     def grf_cor(self):
         grc = GrfCor(self.lba, self.lso, self.conf)
         grc.cargado()
-        grc.graficar()
-        grc.guardar(grc.fig, 'grc.pdf')
-        grc.muestra()
+        # grc.graficar()
+        # grc.guardar(grc.fig, 'grc.png')
+        # grc.muestra()
 
     # def grf_des(self):
     #     pass
