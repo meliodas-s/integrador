@@ -78,6 +78,9 @@ class Barra:
     yin: float
     yfi: float
 
+    # datos de designacion
+    desig: dict
+
     # matrices y ecuaciones
     tra: np.array = None
     rig: np.array = None
@@ -104,6 +107,7 @@ class Barra:
     
     # matriz de rigidez global indexada
     rgi = None
+    
 
     def cal_lmx(self):
         self.lmx = (self.xfi-self.xin)/self.lar

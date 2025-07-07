@@ -6,7 +6,7 @@ from plottable import Table
 import pandas as pd
 import copy
 
-from .ejemplos import ejemplo2 as ejemplo
+from .ejemplos.ejemplo2 import datos as ejemplo
 
 # Parametros
 plt.rcParams['text.usetex'] = True
@@ -25,9 +25,10 @@ ino = ejemplo['ino']
 car = ejemplo['car']
 sop = ejemplo['sop']
 con = ejemplo['con']
+desig = ejemplo['desig']
 
 # Se crea la estructura
-mod = Rock(inc, iba, ino, car, sop,con,pri=False)
+mod = Rock(inc, iba, ino, car, sop,con, desig, pri=False)
 
 mod.grf_est()
 mod.grf_mom()
@@ -35,14 +36,15 @@ mod.grf_cor()
 mod.grf_nor()
 
 # modulo para imprimir matrices
-# imp = Impresion(mod)
-# imp.desp()
-# imp.fuer()
-# imp.rigi()
-# imp.incs()
-# imp.barr()
-# imp.barg()
+imp = Impresion(mod)
+imp.desp()
+imp.fuer()
+imp.rigi()
+imp.incs()
+imp.barr()
+imp.barg()
 
 # modulo de verificado
 ver = Verificado(mod)
 ver.veri()
+ver.impr()

@@ -57,6 +57,7 @@ class Rock():
         car: list,
         sop: list,
         conf: list,
+        desig:dict,
         pri=False
     ):
 
@@ -153,8 +154,9 @@ class Rock():
                     ini.loc[int(fil['nof']), 'ify'],
                     ini.loc[noi, 'cox'],
                     ini.loc[nof, 'cox'],
+                    desig=desig[int(fil['bar'])],
                     yfi=ini.loc[nof, 'coy'],
-                    yin=ini.loc[noi, 'coy']
+                    yin=ini.loc[noi, 'coy'],
                 ))
             lba[idx].cal_lar()
             lba[idx].cal_lmx()
@@ -307,30 +309,30 @@ class Rock():
 
     def grf_est(self):
         gre = GrfEst(self.lba, self.lso, self.conf)
-        # gre.graficar()
-        # gre.guardar(gre.fig, 'gre.png')
-        # gre.muestra()
+        gre.graficar()
+        gre.guardar(gre.fig, 'gre.png')
+        gre.muestra()
 
     def grf_mom(self):
         grm = GrfMom(self.lba, self.lso, self.conf)
         grm.cargado()
-        # grm.graficar()
-        # grm.guardar(grm.fig, 'grm.png')
-        # grm.muestra()
+        grm.graficar()
+        grm.guardar(grm.fig, 'grm.png')
+        grm.muestra()
 
     def grf_nor(self):
         grn = GrfNor(self.lba, self.lso, self.conf)
         grn.cargado()
-        # grn.graficar()
-        # grn.guardar(grn.fig, 'grn.png')
-        # grn.muestra()
+        grn.graficar()
+        grn.guardar(grn.fig, 'grn.png')
+        grn.muestra()
 
     def grf_cor(self):
         grc = GrfCor(self.lba, self.lso, self.conf)
         grc.cargado()
-        # grc.graficar()
-        # grc.guardar(grc.fig, 'grc.png')
-        # grc.muestra()
+        grc.graficar()
+        grc.guardar(grc.fig, 'grc.png')
+        grc.muestra()
 
     # def grf_des(self):
     #     pass

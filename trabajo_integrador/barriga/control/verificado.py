@@ -41,6 +41,9 @@ class Verificado:
         
         # resiste calculo
         self.rca = self.tle/self.cps
+        
+        # resitencia calculo tangencial
+        self.rct = self.rca/(3**(1/3))
 
     def indi(self):
         for i in self.rok.lba:
@@ -67,9 +70,44 @@ class Verificado:
                 self.mve.at[inx, col[1]] = round(i.nor.subs({i.vrx: rdx}),3)
                 self.mve.at[inx, col[2]] = round(i.cor.subs({i.vrx: rdx}),3)
                 self.mve.at[inx, col[3]] = round(i.mom.subs({i.vrx: rdx}),3)
+                self.mve.at[inx, col[6]] = i.desig['nombre']
+                self.mve.at[inx, col[7]] = i.desig['tf']
+                self.mve.at[inx, col[8]] = i.desig['ag']
+                self.mve.at[inx, col[9]] = i.desig['sx']
+                self.mve.at[inx, col[10]] = i.desig['ix']
+                self.mve.at[inx, col[11]] = i.desig['qx']
         
-        self.mve[col[4]] = np.round(np.abs(self.mve[col[1]]/self.rca),3)
-        self.mve[col[5]] = np.round(np.abs(self.mve[col[3]]/self.rca),3)
+        self.mve[col[4]] = np.abs(self.mve[col[1]]/self.rca).map(lambda x: float(x))
+        self.mve[col[5]] = np.abs(self.mve[col[3]]/self.rca).map(lambda x: float(x))
+        self.mve[col[12]] = (np.abs(self.mve[col[1]]/self.mve[col[8]])+np.abs(self.mve[col[3]]/self.mve[col[9]])).map(lambda x: float(x))
+        self.mve[col[13]] = np.abs(
+            self.mve[col[2]]*self.mve[col[11]]/
+            (self.mve[col[7]]*self.mve[col[10]])
+            ).map(lambda x: float(x))
         
+        # verifico tau
+        self.mve[r'\tau verifica'] = 'no cumple'
+        self.mve.loc[self.mve[col[13]] > self.rct, r'\tau verifica'] = 'cumple'
+        
+        # verifico sigma
+        self.mve[r'\sigma verifica'] = 'no cumple'
+        self.mve.loc[self.mve[col[12]] > self.rct, r'\sigma verifica'] = 'cumple'
 
-        print(self.mve.round(2).to_string())
+        print(self.mve.to_string())
+        
+    def impr(self):
+        # Init a figure
+        fig, ax = plt.subplots(figsize=(16, 9))
+
+        # Configuraciones para figura
+        ax.set_title(r'$\fbox{Matriz de verificacion}$')
+        ax.set_facecolor('#EACEC4')
+        ax.set_axisbelow(True)
+        fig.patch.set_facecolor('#EACEC4')
+        ax.axis('off')
+
+        # Configuraciones para figura
+        tab = Table(self.mve, ax)
+
+        # Display the output
+        fig.savefig('sld_mve.png', bbox_inches='tight', dpi=200)
