@@ -285,7 +285,7 @@ class GrfNor(GrfEsf):
 
     def cargado(self):
         for i in self.lba:
-            tr = self.transfo(i, self.con.escm)
+            tr = self.transfo(i, self.con.escn)
             li = [i, i.nor, tr]
             self.tgr.append(li)
 
@@ -297,6 +297,6 @@ class GrfCor(GrfEsf):
 
     def cargado(self):
         for i in self.lba:
-            tr = self.transfo(i, self.con.escm)
+            tr = self.transfo(i, self.con.escq)
             li = [i, i.cor, tr]
             self.tgr.append(li)

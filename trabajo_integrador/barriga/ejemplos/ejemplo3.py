@@ -72,11 +72,12 @@ denom = {
 }
 
 # eleccion que elegi
-bar1 = 'upn80'
-bar2 = 'upn80'
-bar3 = 'upn80'
-bar4 = 'upn80'
-bar5 = 'upn80'
+bar1 = 'upn400'
+bar2 = 'upn380'
+bar3 = 'upn300'
+bar4 = 'upn380'
+bar5 = 'upn300'
+bar6 = 'upn300'
 
 # estructura2 del tp
 datos = {
@@ -89,63 +90,70 @@ datos = {
         [0, False],
 
         # 3
-        [0, True],
+        [0, False],
 
         # 4
-        [-25e3, True],
+        [0, False],
 
         # 5
-        [13.5e3, True],
+        [0, False],
 
         # 6
-        [9e3-20.83e3, True],
+        [-3750.0e3, True],
 
         # 7
-        [0, False],
+        [0, True],
 
         # 8
-        [0, False],
+        [0, True],
 
         # 9
-        [0, False],
+        [0, True],
 
         # 10
-        [0, False],
+        [0, True],
 
         # 11
         [0, True],
 
         # 12
-        [-62.5e3, True],
+        [0, True],
 
         # 13
-        [-50e3, True],
-
+        [-1666.66e3+3750.0e3, True],
+        
         # 14
         [0, True],
 
         # 15
-        [83.333e3, True],
+        [-1250e3, True],
 
         # 16
-        [0, False],
+        [-500e3, True],
 
         # 17
-        [0, False],
+        [0, True],
 
         # 18
         [0, False],
 
         # 19
-        [0, True],
+        [0, False],
+
+        # 20
+        [0, False],
+        
+        # 21
+        [1666.66e3, True],
 
     ]    # bar,noi,nof,are,mod,iner (m, N)
     , 'iba': [
-        [1, 1, 7, 2*denom[bar1]['ag'], mod, 2*denom[bar1]['ix']],
-        [2, 3, 2, 2*denom[bar2]['ag'], modt, 2*denom[bar2]['ix']],
-        [3, 2, 4, 2*denom[bar3]['ag'], mod, 2*denom[bar3]['ix']],
-        [4, 4, 5, 2*denom[bar4]['ag'], mod, 2*denom[bar4]['ix']],
-        [5, 6, 5, 2*denom[bar5]['ag'], mod, 2*denom[bar5]['ix']],
+        [1, 1, 8, 2*denom[bar1]['ag'], mod, 2*denom[bar1]['ix']],
+        [2, 2, 9, 2*denom[bar2]['ag'], mod, 2*denom[bar2]['ix']],
+        [3, 9, 5, 2*denom[bar3]['ag'], mod, 2*denom[bar3]['ix']],
+        [4, 2, 7, 2*denom[bar4]['ag'], modt, 2*denom[bar4]['ix']],
+        [5, 3, 4, 2*denom[bar5]['ag'], mod, 2*denom[bar5]['ix']],
+        [6, 6, 5, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
     ],
 
     # designaciones
@@ -155,38 +163,41 @@ datos = {
         3: denom[bar3],
         4: denom[bar4],
         5: denom[bar5],
+        6: denom[bar6],
     },
 
 
     # nod,imn,ifx,ify,cox,coy
     'ino': [
-        [1, 3, 2, 1, 0, 0],
-        [2, 6, 5, 4, 5, 3],
-        [3, 9, 8, 7, 5, 0],
-        [4, 12, 11, 10, 10, 3],
-        [5, 15, 14, 13, 20, 3],
-        [6, 18, 17, 16, 20, 1],
+        [1, 3, 2, 1, 10, 0],
+        [2, 6, 5, 4, 0, 20],
+        [3, 9, 11, 10, 10, 35],
+        [4, 12, 14, 15, 30, 20],
+        [5, 21, 17, 16, 50, 20],
+        [6, 18, 20, 19, 50, 10],
 
-        # nodos extra por barra para pasadores
-        [7, 19, 5, 4, 5, 3],
+        # nodo 3
+        [8, 8, 11, 10, 10, 35],
+        [7, 7, 11, 10, 10, 35],
+
+        # nodo 4
+        [9, 13, 14, 15, 30, 20],
     ]    # Cargas (bar, (1:ver, 2:hor ,3:tri), q)
     , 'car': [
-        [2, 3, 30e3],
-        [3, 1, 10e3],
-        [4, 1, 10e3],
+        [2, 1, 50e3],
+        [3, 1, 50e3],
     ],
 
     # soporte (tipo, nodo, angulo)
     'sop': [
-        [2, 1, 0],
-        [3, 3, 0],
+        [2, 2, 0],
+        [3, 1, 0],
         [3, 6, 0],
-        [1, 4, 0],
     ],
 
     # configuraciones
     'con': [
         # xmin, xmax, ymin, ymax, escm, escq, escn
-        -3, 25, -2, 10, 1/15000, 1/15000, 1/15000
+        -3, 60, -2, 40, 1/300000, 1/60000, 1/600000
     ]
 }

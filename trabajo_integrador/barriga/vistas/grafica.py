@@ -51,6 +51,10 @@ class Grafica:
             dict(zip(labels, handles)).keys()
         )
         
+        ax.tick_params(axis='x', labelrotation=60)  # Eje x
+        ax.tick_params(axis='both', labelsize=7)  # Cambia tamaño en ambos ejes
+
+        
     def guardar(self, fig,nombre):
         fig.set_size_inches(15, 15)
         fig.savefig(

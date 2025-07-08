@@ -6,8 +6,9 @@ from plottable import Table
 
 class Impresion:
 
-    def __init__(self, rok: Rock):
+    def __init__(self, rok: Rock, res=250):
         self.rok: Rock = rok
+        self.res: int = res
 
     def desp(self):
         # texto de la matriz de desplazamiento
@@ -27,7 +28,7 @@ class Impresion:
         ax.axis('off')
 
         # Display the output
-        fig.savefig('des.png', bbox_inches='tight', dpi=200)
+        fig.savefig('des.png', bbox_inches='tight', dpi=self.res)
 
     def fuer(self):
         # texto de la matriz de fuerzas
@@ -47,11 +48,14 @@ class Impresion:
         ax.axis('off')
 
         # Display the output
-        fig.savefig('fue.png', bbox_inches='tight', dpi=200)
+        fig.savefig('fue.png', bbox_inches='tight', dpi=self.res)
 
     def rigi(self):
         # Init a figure
-        fig, ax = plt.subplots(figsize=(16, 9))
+        fig, ax = plt.subplots(figsize=(23, 9))
+
+        dff = self.rok.rig.applymap(
+            lambda x: f"{x:.4}" if isinstance(x, (float, int)) else x)
 
         # Configuraciones para figura
         ax.set_title(r'$\fbox{Matriz de rigidez global}$')
@@ -61,10 +65,11 @@ class Impresion:
         ax.axis('off')
 
         # Configuraciones para figura
-        tab = Table(self.rok.rig.round(2), ax)
+        # tab = Table(self.rok.rig.round(4), ax)
+        tab = Table(dff, ax)
 
         # Display the output
-        fig.savefig('rig.png', bbox_inches='tight', dpi=200)
+        fig.savefig('rig.png', bbox_inches='tight', dpi=self.res)
 
     def incs(self):
         # texto de la matriz incognitas
@@ -84,7 +89,7 @@ class Impresion:
         ax.axis('off')
 
         # Display the output
-        fig.savefig('inc.png', bbox_inches='tight', dpi=200)
+        fig.savefig('inc.png', bbox_inches='tight', dpi=self.res)
 
     def barg(self):
         # imprime las matrices de rigidez de cada barra
@@ -102,7 +107,7 @@ class Impresion:
             tab = Table(i.rgi.round(2), ax)
 
             # Display the output
-            fig.savefig(f'sld_ba{i.bar}_a.png', bbox_inches='tight', dpi=200)
+            fig.savefig(f'sld_ba{i.bar}_a.png', bbox_inches='tight', dpi=self.res)
 
     def barr(self):
         for i in self.rok.lba:
@@ -117,8 +122,9 @@ class Impresion:
             txt = "Las valores de x[m] son de desde 0 hasta el final de la barra."
             fig, ax = plt.subplots(figsize=(2, 1))
             ax.text(0, 0, tit, ha='center', va='bottom')
-            ax.text(0, -1, txt,ha='center', va='top')
-            ax.text(0, -2, r'\fbox{Esfuerzo de momento}',ha='center', va='top')
+            ax.text(0, -1, txt, ha='center', va='top')
+            ax.text(0, -2, r'\fbox{Esfuerzo de momento}',
+                    ha='center', va='top')
             ax.text(0, -3, r'\[%s\]' % lt2, ha='center', va='top')
             ax.text(0, -4, r'\fbox{Esfuerzo de corte}', ha='center', va='top')
             ax.text(0, -5, r'\[%s\]' % lt3, ha='center', va='top')
@@ -135,4 +141,4 @@ class Impresion:
             ax.axis('off')
 
             # Display the output
-            fig.savefig(f'sld_ba{bid}_b.png', bbox_inches='tight', dpi=200)
+            fig.savefig(f'sld_ba{bid}_b.png', bbox_inches='tight', dpi=self.res)
