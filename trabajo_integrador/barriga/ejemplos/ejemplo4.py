@@ -72,34 +72,61 @@ denom = {
 }
 
 # eleccion que elegi
-bar1 = 'upn400'
-bar2 = 'upn380'
-bar3 = 'upn300'
-bar4 = 'upn380'
-bar5 = 'upn300'
-bar6 = 'upn300'
+bar1 = 'upn80'
+bar2 = 'upn80'
+bar3 = 'upn80'
+bar4 = 'upn80'
+bar5 = 'upn80'
+bar6 = 'upn80'
+bar7 = 'upn80'
+bar8 = 'upn80'
+bar9 = 'upn80'
+bar10 = 'upn80'
+bar11 = 'upn80'
+bar12 = 'upn80'
+bar13 = 'upn80'
+bar14 = 'upn80'
+bar15 = 'upn80'
+bar16 = 'upn80'
+bar17 = 'upn80'
+bar18 = 'upn80'
+bar19 = 'upn80'
+bar20 = 'upn80'
+bar21 = 'upn80'
+bar22 = 'upn80'
+bar23 = 'upn80'
+bar24 = 'upn80'
+bar25 = 'upn80'
+bar26 = 'upn80'
+bar27 = 'upn80'
+bar28 = 'upn80'
+bar29 = 'upn80'
+bar30 = 'upn80'
+bar31 = 'upn80'
+bar32 = 'upn80'
+bar33 = 'upn80'
 
 # estructura2 del tp
 datos = {
     # Fuerzas
     'inc': [
         # 1
-        [0, False],
+        [0, True],
 
         # 2
-        [0, False],
+        [0, True],
 
         # 3
-        [0, False],
+        [0, True],
 
         # 4
-        [0, False],
+        [0, True],
 
         # 5
-        [0, False],
+        [0, True],
 
         # 6
-        [-3750.0e3, True],
+        [0, True],
 
         # 7
         [0, True],
@@ -120,40 +147,158 @@ datos = {
         [0, True],
 
         # 13
-        [-1666.66e3+3750.0e3, True],
+        [0, False],
 
         # 14
-        [0, True],
+        [0, False],
 
         # 15
-        [-1250e3, True],
+        [0, True],
 
         # 16
-        [-500e3, True],
+        [0, True],
 
         # 17
         [0, True],
 
         # 18
-        [0, False],
+        [0, True],
 
         # 19
-        [0, False],
+        [0, True],
 
         # 20
-        [0, False],
+        [0, True],
 
         # 21
-        [1666.66e3, True],
+        [0, True],
+
+        # 22
+        [0, False],
+
+        # 23
+        [0, False],
+
+        # 24
+        [0, True],
+
+        # 25
+        [0, True],
+
+        # 26
+        [0, True],
+
+        # 27
+        [0, True],
+
+        # 28
+        [0, True],
+
+        # 29
+        [0, True],
+
+        # 30
+        [0, True],
+
+        # 31
+        [0, True],
+
+        # 32
+        [0, True],
+
+        # 33
+        [0, True],
+
+        # 34
+        [0, True],
+
+        # 35
+        [0, True],
+
+        # 36
+        [0, True],
+
+        # 37
+        [0, True],
+
+        # 38
+        [0, True],
+
+        # 39
+        [0, True],
+
+        # 40
+        [0, True],
+
+        # 41
+        [0, True],
+
+        # 42
+        [0, True],
+
+        # 43
+        [0, False],
+
+        # 44
+        [0, False],
+
+        # 45
+        [0, True],
+
+        # 46
+        [0, True],
+
+        # 47
+        [0, True],
+
+        # 48
+        [0, True],
+
+        # 49
+        [0, False],
+
+        # 50
+        [0, False],
+
+        # 51
+        [0, True],
+
 
     ]    # bar,noi,nof,are,mod,iner (m, N)
     , 'iba': [
-        [1, 1, 8, 2*denom[bar1]['ag'], mod, 2*denom[bar1]['ix']],
-        [2, 2, 9, 2*denom[bar2]['ag'], mod, 2*denom[bar2]['ix']],
-        [3, 9, 5, 2*denom[bar3]['ag'], mod, 2*denom[bar3]['ix']],
-        [4, 2, 7, 2*denom[bar4]['ag'], modt, 2*denom[bar4]['ix']],
-        [5, 3, 4, 2*denom[bar5]['ag'], mod, 2*denom[bar5]['ix']],
-        [6, 6, 5, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [1, 1, 2, 2*denom[bar1]['ag'], mod, 2*denom[bar1]['ix']],
+        [2, 2, 3, 2*denom[bar2]['ag'], mod, 2*denom[bar2]['ix']],
+        [3, 3, 4, 2*denom[bar3]['ag'], mod, 2*denom[bar3]['ix']],
+        [4, 4, 5, 2*denom[bar4]['ag'], modt, 2*denom[bar4]['ix']],
+        [5, 5, 6, 2*denom[bar5]['ag'], mod, 2*denom[bar5]['ix']],
+        [6, 1, 7, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [7, 1, 8, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [8, 2, 8, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [9, 2, 9, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [10, 3, 9, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [11, 9, 4, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [12, 4, 10, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [13, 4, 11, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [14, 5, 11, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [15, 6, 12, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [16, 7, 8, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [17, 8, 9, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [18, 9, 10, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [19, 10, 11, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [20, 11, 12, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [21, 7, 13, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [22, 8, 13, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [23, 13, 9, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [24, 14, 9, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [25, 9, 15, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [26, 15, 10, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [27, 10, 16, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [28, 16, 11, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [29, 13, 14, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [30, 14, 15, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [31, 15, 16, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [32, 16, 17, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
+        [33, 17, 11, 2*denom[bar5]['ag'], modt, 2*denom[bar5]['ix']],
     ],
 
     # designaciones
@@ -164,62 +309,89 @@ datos = {
         4: denom[bar4],
         5: denom[bar5],
         6: denom[bar6],
+        7: denom[bar7],
+        8: denom[bar8],
+        9: denom[bar9],
+        10: denom[bar10],
+        11: denom[bar11],
+        12: denom[bar12],
+        13: denom[bar13],
+        14: denom[bar14],
+        15: denom[bar15],
+        16: denom[bar16],
+        17: denom[bar17],
+        18: denom[bar18],
+        19: denom[bar19],
+        20: denom[bar20],
+        21: denom[bar21],
+        22: denom[bar22],
+        23: denom[bar23],
+        24: denom[bar24],
+        25: denom[bar25],
+        26: denom[bar26],
+        27: denom[bar27],
+        28: denom[bar28],
+        29: denom[bar29],
+        30: denom[bar30],
+        31: denom[bar31],
+        32: denom[bar32],
+        33: denom[bar33],
     },
 
 
-    # nod,imn,ifx,ify,cox,coy
+    # nod, imn, ifX, ifY, cox, coy
     'ino': [
         [
             1, 3, 2, 1,
-            0, 0.036],
+            0.000, 0.036],
         [
-            2, 6, 5, 4,
-            0.356, 0.036],
+            2, 15, 14, 13,
+            0.350, 0.036],
         [
-            3, 9, 11, 10,
-            10, 35],
+            3, 24, 23, 22,
+            0.724, 0.036],
         [
-            4, 12, 14, 15,
-            30, 20],
+            4, 30, 29, 28,
+            1.291, 0.000],
         [
-            5, 21, 17, 16,
-            50, 20],
+            5, 45, 44, 43,
+            2.010, 0.000],
         [
-            6, 18, 20, 19,
-            50, 10],
+            6, 51, 50, 49,
+            2.315, 0.036],
         [
-            7, 18, 20, 19,
-            50, 10],
+            7, 6, 5, 4,
+            0.000, 0.356],
         [
-            8, 18, 20, 19,
-            50, 10],
+            8, 12, 11, 10,
+            0.350, 0.227],
         [
-            9, 18, 20, 19,
-            50, 10],
+            9, 21, 20, 19,
+            0.697, 0.227],
         [
-            10, 18, 20, 19,
-            50, 10],
+            10, 33, 32, 31,
+            1.325, 0.227],
         [
-            11, 18, 20, 19,
-            50, 10],
+            11, 42, 41, 40,
+            2.010, 0.227],
         [
-            12, 18, 20, 19,
-            50, 10],
+            12, 48, 47, 46,
+            2.315, 0.227],
         [
-            13, 18, 20, 19,
-            50, 10],
+            13, 9, 8, 7,
+            0.350, 0.476],
         [
-            14, 18, 20, 19,
-            50, 10],
+            14, 18, 17, 16,
+            0.650, 0.557],
         [
-            15, 18, 20, 19,
-            50, 10],
+            15, 27, 26, 25,
+            0.993, 0.391],
         [
-            16, 18, 20, 19,
-            50, 10],
+            16, 36, 35, 34,
+            1.395, 0.614],
         [
-            17, 18, 20, 19,
-            50, 10],
+            17, 39, 38, 37,
+            1.395, 1.137],
 
     ],
 

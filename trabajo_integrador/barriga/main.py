@@ -6,7 +6,7 @@ from plottable import Table
 import pandas as pd
 import copy
 
-from .ejemplos.ejemplo2 import datos as ejemplo
+from .ejemplos.ejemplo4 import datos as ejemplo
 
 # Parametros
 plt.rcParams['text.usetex'] = True
