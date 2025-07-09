@@ -12,6 +12,12 @@ from .modelos.config import Conf
 # soportes
 from .modelos.soportes import ViculoSeg, ViculoPri, viculoTer
 
+# clases
+from typing import Literal
+
+# h(orizontal), v(vertical), n(ninguna)
+TipoCarga = Literal["h", "v", "n"]
+
 
 class Rock():
     '''Calcula la matriz de rigidez global.
@@ -51,13 +57,16 @@ class Rock():
 
     def __init__(
         self,
-        inc: list,
+        incog: list,
         iba: list,
         ino: list,
         car: list,
         sop: list,
         conf: list,
-        desig:dict,
+        desig: dict,
+        tipo: TipoCarga = 'n',
+        cag: int = 0,
+        pesos: list = None,
         pri=False
     ):
 
@@ -87,90 +96,70 @@ class Rock():
 
         # ecuaciond e igualdades, incognitas
         self.ecu = None
-        
+
         # cantidad de barras
         self.can = None
 
-        # Input de cargas
-        cgs: list[Carga] = []
-        for i in car:
-            cgs.append(Carga(i[0], i[1], i[2]))
+        # designaciones de barras
+        self.desig: dict = desig
+
+        # lista de barras
+        self.lba: list[Barra] = list()
+
+        # situacion a analizar
+        self.sit: TipoCarga = tipo
+
+        # multiplo de gravedad
+        self.cag = cag
+
+        # peso adjunto a cada barra
+        self.pes = pesos
 
         # Input fuerzas e incognitas (encognitas)
         ncc = ['fue', 'des']
-        inc = pd.DataFrame(inc, columns=ncc)
+        self.inc = pd.DataFrame(incog, columns=ncc)
 
-        # Input barras
+        # dataframe barras
         bac = ['bar', 'noi', 'nof', 'are', 'mod', 'ine']
-        iba = pd.DataFrame(iba, columns=bac)
-        self.can = iba.shape[0]
+        self.iba = pd.DataFrame(iba, columns=bac)
+        self.can = self.iba.shape[0]
 
         # Input nodos
         noc = ['nod', 'imn', 'ifx', 'ify', 'cox', 'coy']
         ino = pd.DataFrame(ino, columns=noc)
+        self.ini = ino.set_index('nod')
 
-        # Input nodos cambiando indice
-        ini = ino.set_index('nod')
-        self.ini = ini
+        # cargo las barras
+        self.car_bar()
 
-        # Input de soportes
+        # cargo los desplazamientos
+        self.car_des(car)
+
+        # input de cargas
+        self.cgs: list[Carga] = []
+        for i in car:
+            self.cgs.append(Carga(i[0], i[1], i[2]))
+
+        # input de soportes
         self.lso = list()
         for i in sop:
             self.cre_sop(i)
 
         # Cantidad de libertades
-        can = inc.shape[0]
+        self.cal = self.inc.shape[0]
 
         # Numeracion del 1 al n(numero de libertades)
-        nli = np.arange(1, can+1)
+        nli = np.arange(1, self.cal+1)
 
         # Crear data-frame de rigidez
-        rig = pd.DataFrame(0, index=nli, columns=nli).astype(float)
+        self.rig = pd.DataFrame(0, index=nli, columns=nli).astype(float)
 
-        # lista de barras
-        lba: list[Barra] = []
-
-        # merge de datos
-        for idx, fil in iba.iterrows():
-
-            # nodos que conectan a esa barra
-            noi = fil['noi']
-            nof = fil['nof']
-
-            # creo una nueva barra
-            lba.append(
-                Barra(
-                    int(fil['bar']),
-                    fil['noi'],
-                    fil['nof'],
-                    fil['are'],
-                    fil['mod'],
-                    fil['ine'],
-                    ini.loc[int(fil['noi']), 'imn'],
-                    ini.loc[int(fil['noi']), 'ifx'],
-                    ini.loc[int(fil['noi']), 'ify'],
-                    ini.loc[int(fil['nof']), 'imn'],
-                    ini.loc[int(fil['nof']), 'ifx'],
-                    ini.loc[int(fil['nof']), 'ify'],
-                    ini.loc[noi, 'cox'],
-                    ini.loc[nof, 'cox'],
-                    desig=desig[int(fil['bar'])],
-                    yfi=ini.loc[nof, 'coy'],
-                    yin=ini.loc[noi, 'coy'],
-                ))
-            lba[idx].cal_lar()
-            lba[idx].cal_lmx()
-            lba[idx].cal_lmy()
-            lba[idx].cal_tra()
-            lba[idx].cal_ril()
-            lba[idx].cal_rig()
-
-            # agrego los esfuerzos a esta barra
-            hlp.mrb(lba[idx], rig)
+        # se suma todo en la matriz de rigidez
+        for bar in self.lba:
+            hlp.mrb(bar, self.rig)
 
         # se crea matriz symbolica rigSimbolica
-        self.rig = rig
-        rgs = sp.Matrix(rig.values)
+        rgs = sp.Matrix(self.rig.values)
 
         # defino matrizes de Desplaza e Incog.(fuerzas)
         mde = sp.Matrix()
@@ -184,7 +173,7 @@ class Rock():
         igt = []
 
         # se crean los datos de las incognitas
-        for idx, fil in inc.iterrows():
+        for idx, fil in self.inc.iterrows():
             if not fil['des']:
                 fue = sp.symbols(f'Q_{idx + 1}')
                 mde = mde.col_join(sp.Matrix([0]))
@@ -232,10 +221,10 @@ class Rock():
         )
 
         # consigo los valores de las fuerzas en las barras
-        for ib in lba:
+        for bar in self.lba:
 
             # desplazamiento de los nodos en x e y
-            den = [ib.nix, ib.niy, ib.nim, ib.nfx, ib.nfy, ib.nfm]
+            den = [bar.nix, bar.niy, bar.nim, bar.nfx, bar.nfy, bar.nfm]
 
             # vector de desplazamientos [DNx, DNy, DFx, DFy]
             vde = np.array(
@@ -250,20 +239,20 @@ class Rock():
             )
 
             # cálculo del esfuerzo de la barra
-            esf = (ib.ril@ib.tra)@vde
-            esf = pd.DataFrame(esf, index=den, columns=[f'{ib.bar}'])
+            esf = (bar.ril@bar.tra)@vde
+            esf = pd.DataFrame(esf, index=den, columns=[f'{bar.bar}'])
 
             # guardo los valores
-            ib.esf = esf
+            bar.esf = esf
 
         # momentos en barras con cargas
-        for cag in cgs:
+        for cag in self.cgs:
 
             # indice de barra
             iba = cag.bar
 
             # barra en cuestion
-            bar = lba[iba-1]
+            bar = self.lba[iba-1]
 
             match cag.tip:
                 case 1:
@@ -273,14 +262,11 @@ class Rock():
                 case 3:
                     bar.cat = cag
 
-        for i in lba:
+        for i in self.lba:
             # se calculan los momentos
             i.cal_mom()
             i.cal_cor()
             i.cal_nor()
-
-        # se guardan las barras en el objeto Rock
-        self.lba = lba
 
         if pri:
             self.imprimi()
@@ -303,13 +289,113 @@ class Rock():
             hlp.col(f"Barra: {i.bar}")
             hlp.col(f"Matriz sistema global:")
             print(i.rgi.to_string())
-            
+
             hlp.col(f"Esfuerzos:")
             sp.pprint(i.esf)
-    
+
     def car_bar(self):
         '''Funcion encargada de cargar barras'''
-        pass
+        # merge de datos
+        for idx, fil in self.iba.iterrows():
+
+            # nodos que conectan a esa barra
+            noi = fil['noi']
+            nof = fil['nof']
+
+            # creo una nueva barra
+            self.lba.append(
+                Barra(
+                    int(fil['bar']),
+                    fil['noi'],
+                    fil['nof'],
+                    fil['are'],
+                    fil['mod'],
+                    fil['ine'],
+                    self.ini.loc[int(fil['noi']), 'imn'],
+                    self.ini.loc[int(fil['noi']), 'ifx'],
+                    self.ini.loc[int(fil['noi']), 'ify'],
+                    self.ini.loc[int(fil['nof']), 'imn'],
+                    self.ini.loc[int(fil['nof']), 'ifx'],
+                    self.ini.loc[int(fil['nof']), 'ify'],
+                    self.ini.loc[noi, 'cox'],
+                    self.ini.loc[nof, 'cox'],
+                    desig=self.desig[int(fil['bar'])],
+                    yfi=self.ini.loc[nof, 'coy'],
+                    yin=self.ini.loc[noi, 'coy'],
+                ))
+            self.lba[idx].cal_lar()
+            self.lba[idx].cal_lmx()
+            self.lba[idx].cal_lmy()
+            self.lba[idx].cal_tra()
+            self.lba[idx].cal_ril()
+            self.lba[idx].cal_rig()
+            self.lba[idx].cal_ang()
+
+    def car_des(self, cag: list):
+        '''funcion encargada de cargar nodos
+        dependiendo si es una situacion de carga verticales
+        o cargas horizonales. Ejemplo: un choque o el peso
+        mismo de la estructura
+
+        - Por convencion el signo de la carga vertical
+        ira positivo si es que la carga va de arriba a abajo
+        '''
+        grav = 9.8
+
+        match self.sit:
+
+            # gravedad Nm/s2
+            case 'h':
+                print(self.pes)
+                pass
+
+            case 'v':
+                print(self.pes)
+                for bar in self.lba:
+                    bar.mas = self.pes[bar.bar]
+
+                    # creo carga vertical [N/m2]
+                    cargv = grav*self.cag*bar.mas/bar.lar
+
+                    # componentes en x e y
+                    cargvx = -cargv*np.sin(bar.ang)
+                    cargvy = cargv*np.cos(bar.ang)
+
+                    # fuerzas verticales en ambos nodods
+                    qv = cargv*bar.lar/2
+
+                    # momento en a (nodo incia)
+                    moi = -cargvy*bar.lar**2/12
+
+                    # momento en a (nodo final)
+                    mof = cargvy*bar.lar**2/12
+
+                    # se suman los datos a las incognitas
+                    self.inc.at[bar.nim-1, 'fue'] += round(moi, 5)
+                    self.inc.at[bar.nfm-1, 'fue'] += round(mof, 5)
+                    self.inc.at[bar.niy-1, 'fue'] += -qv
+                    self.inc.at[bar.nfy-1, 'fue'] += -qv
+
+                    # se guardan las cargas
+                    cag.append([bar.bar, 1, round(cargvy, 5)])
+                    cag.append([bar.bar, 2, round(cargvx, 5)])
+
+                    print(
+                        f"""
+                        bar{bar.bar}
+                            masa:{bar.mas}
+                            carg:{cargv}
+                            rad:{bar.ang}
+                            qx:{cargvx}
+                            qy:{cargvy}
+                            v:{qv}
+                            mb: {mof}
+                            ma: {moi}
+                            lar{bar.lar}
+                        """)
+
+            case 'n':
+                pass
 
     def grf_est(self):
         gre = GrfEst(self.lba, self.lso, self.conf)

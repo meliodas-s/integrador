@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from .carga import Carga0
 import numpy as np
 import sympy as sp
-
+import math
 
 @dataclass
 class Barra:
@@ -108,6 +108,9 @@ class Barra:
     # matriz de rigidez global indexada
     rgi = None
     
+    # angulo en radianes
+    ang = None
+    
 
     def cal_lmx(self):
         self.lmx = (self.xfi-self.xin)/self.lar
@@ -155,6 +158,14 @@ class Barra:
     def cal_rig(self):
         # Calculo la matriz de rigidez global (k) y guardo.
         self.rig = (self.tra.T@self.ril)@self.tra
+
+    def cal_ang(self):
+        # Calculo la matriz de rigidez global (k) y guardo.
+                # se calcula el angulo
+        dx = self.xfi - self.xin
+        dy = self.yfi - self.yin
+        self.ang = math.atan2(dy, dx)
+
 
     def cal_lar(self):
         self.lar = np.sqrt((self.xfi-self.xin)**2+(self.yfi-self.yin)**2)
@@ -206,6 +217,7 @@ class Barra:
 
         # ecuacion de esfuerzo normal en toda la selfra
         ecu = ((mfl-mic)/(self.lar-0))*(self.cav.vrx-0) + mic
-        ecu += self.cah.cor
+        ecu += self.cah.nor
         ecu = ecu.subs({self.cav.vrl: self.lar})
         self.nor = ecu
+        print(f'Barra{self.bar}: normal:{self.nor}')

@@ -98,7 +98,7 @@ class GrfEsf(Grafica):
                 arrowprops=dict(
                     arrowstyle="->",
                     color="black",
-                    lw=0.8,
+                    lw=0.65,
                     alpha=0.7
                 )
             )
@@ -234,7 +234,7 @@ class GrfEsf(Grafica):
             alpha=0.6,
             edgecolor='none',
             boxstyle='round')
-        if math.fabs(yva[-1]) > 10:
+        if math.fabs(yva[-1]) > 1:
             x_t, y_t = tra.transform_point((xva[-1], yva[-1]))
             txt = axe.text(
                 x_t,
@@ -250,7 +250,7 @@ class GrfEsf(Grafica):
             self.ctx.append(txt.get_position())
 
         # Letra de extemos offsets en x e y
-        if math.fabs(yva[0]) > 10:
+        if math.fabs(yva[0]) > 1:
             x_t, y_t = tra.transform_point((xva[0], yva[0]))
             txt = axe.text(
                 x_t,

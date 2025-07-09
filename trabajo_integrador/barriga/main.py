@@ -1,5 +1,6 @@
 from .modu import Rock
 from .control.impresion import Impresion
+from .control.cargadorc import Cargadorc
 from .control.verificado import Verificado
 import matplotlib.pyplot as plt
 from plottable import Table
@@ -26,25 +27,26 @@ car = ejemplo['car']
 sop = ejemplo['sop']
 con = ejemplo['con']
 desig = ejemplo['desig']
+pesos = ejemplo['pesos']
 
 # Se crea la estructura
-mod = Rock(inc, iba, ino, car, sop,con, desig, pri=False)
+mod = Rock(inc, iba, ino, car, sop, con, desig, 'v', 1, pesos=pesos, pri=False)
 
 mod.grf_est()
 mod.grf_mom()
 mod.grf_cor()
 mod.grf_nor()
 
-# modulo para imprimir matrices
-imp = Impresion(mod)
-imp.desp()
-imp.fuer()
-imp.rigi()
-imp.incs()
-imp.barr()
-imp.barg()
+# # modulo para imprimir matrices
+# imp = Impresion(mod)
+# imp.desp()
+# imp.fuer()
+# imp.rigi()
+# imp.incs()
+# imp.barr()
+# imp.barg()
 
-# modulo de verificado
-ver = Verificado(mod)
-ver.veri()
-ver.impr()
+# # modulo de verificado
+# ver = Verificado(mod)
+# ver.veri()
+# ver.impr()

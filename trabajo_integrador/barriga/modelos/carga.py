@@ -30,10 +30,11 @@ class Carga:
                 self.vrl: sp.Symbol = sp.symbols('l')
                 self.vrx: sp.Symbol = sp.symbols('x')
                 vrq = self.dat
-                self.mom = (
-                    vrq*self.vrl/2
-                    - vrq*self.vrl
+                self.nor = (
+                    +vrq*self.vrl/2
+                    - vrq*self.vrx
                 )
+                print(f'Carga2:{self.nor}')
 
             case 3:
                 # carga triangular
