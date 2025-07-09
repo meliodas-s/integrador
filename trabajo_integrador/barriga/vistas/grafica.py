@@ -12,10 +12,10 @@ class Grafica:
         # Configuraciones para figura
         ax.legend()
         ax.set_aspect('equal')
-        ax.set_xticks(np.arange(mix, max, spc))
-        ax.set_yticks(np.arange(miy, may, spc))
-        ax.set_xticks(np.arange(mix, max, spcmin), minor=True)
-        ax.set_yticks(np.arange(miy, may, spcmin), minor=True)
+        ax.set_xticks(np.arange(int(mix)-1, int(max)+1, spc))
+        ax.set_yticks(np.arange(int(miy)-1, int(may)+1, spc))
+        ax.set_xticks(np.arange(int(mix)-1, int(max)+1, spcmin), minor=True)
+        ax.set_yticks(np.arange(int(miy)-1, int(may)+1, spcmin), minor=True)
 
         # grid menores
         ax.grid(
@@ -50,12 +50,11 @@ class Grafica:
             dict(zip(labels, handles)).values(),
             dict(zip(labels, handles)).keys()
         )
-        
+
         ax.tick_params(axis='x', labelrotation=60)  # Eje x
         ax.tick_params(axis='both', labelsize=7)  # Cambia tamaño en ambos ejes
 
-        
-    def guardar(self, fig,nombre):
+    def guardar(self, fig, nombre):
         fig.set_size_inches(15, 15)
         fig.savefig(
             nombre,

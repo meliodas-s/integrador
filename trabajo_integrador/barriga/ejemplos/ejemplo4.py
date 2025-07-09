@@ -411,6 +411,6 @@ datos = {
     # configuraciones
     'con': [
         # xmin, xmax, ymin, ymax, escm, escq, escn
-        -3, 60, -2, 40, 1/300000, 1/60000, 1/600000
+        -0.5, 2.5, -0.5, 1.5, 1/300000, 1/60000, 1/600000
     ]
 }

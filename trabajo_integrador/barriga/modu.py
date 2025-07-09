@@ -306,12 +306,16 @@ class Rock():
             
             hlp.col(f"Esfuerzos:")
             sp.pprint(i.esf)
+    
+    def car_bar(self):
+        '''Funcion encargada de cargar barras'''
+        pass
 
     def grf_est(self):
         gre = GrfEst(self.lba, self.lso, self.conf)
-        # gre.graficar()
-        # gre.guardar(gre.fig, 'gre.png')
-        # gre.muestra()
+        gre.graficar()
+        gre.guardar(gre.fig, 'gre.png')
+        gre.muestra()
 
     def grf_mom(self):
         grm = GrfMom(self.lba, self.lso, self.conf)

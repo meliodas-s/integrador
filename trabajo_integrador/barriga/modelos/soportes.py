@@ -21,7 +21,7 @@ class Vinculo:
         self.xp = 0.5
         self.yp = 1
 
-    def print(self, ax, x=0, y=0, fi=0, c=1):
+    def print(self, ax, x=0, y=0, fi=0, c=0.1):
         """
         Insertar_Vinculo.
         Inserta una PathCollection en un Axes dado, con transformación:

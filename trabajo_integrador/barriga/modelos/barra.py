@@ -206,5 +206,6 @@ class Barra:
 
         # ecuacion de esfuerzo normal en toda la selfra
         ecu = ((mfl-mic)/(self.lar-0))*(self.cav.vrx-0) + mic
+        ecu += self.cah.cor
         ecu = ecu.subs({self.cav.vrl: self.lar})
         self.nor = ecu
