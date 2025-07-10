@@ -12,11 +12,11 @@ denom = {
 
         # para completar
         'sx': 3.061*10**(-8)/(38.1e3/2),
-        'ra': 38.1e3/2,
+        'ra': 38.1e-3/2,
         'tf':1.6e-3,
 
         # sx = 8π​(R4−r4) (para media seccion)
-        'qx': 8*math.pi*((38.1e3/2)**2-(38.1e3/2-1.6e-3)**4)
+        'qx': 8*math.pi*((38.1e-3/2)**4-(38.1e-3/2-1.6e-3)**4)
     },
 
     "38.1mm x 2mm": {
@@ -25,10 +25,10 @@ denom = {
         "ix": 3.706*10**(-8),
 
         # para completar
-        'sx': 3.706*10**(-8)/(2e-3/2),
-        'ra': 2e-3/2,
+        'sx': 3.706*10**(-8)/(38.1e-3/2),
+        'ra': 38.1e-3/2,
         'tf':2e-3,
-        'qx': 8*math.pi*((2e-3/2)**2-(2e-3/2-2e-3)**4)
+        'qx': 8*math.pi*((38.1e-3/2)**4-(38.1e-3/2-2e-3)**4)
     },
 
     "38.1mm x 2.5mm": {
@@ -37,47 +37,95 @@ denom = {
         "ix": 4.451*10**(-8),
 
         # para completar
-        'sx': 4.451*10**(-8)/(2.5e-3/2),
-        'ra': 2.5e-3/2,
-        'tf':2.5e-3,
-        'qx':8*math.pi*((2.5e-3/2)**2-(2.5e-3/2-2.5e-3)**4)
+        'sx': 4.451*10**(-8)/(38.1e-3/2),
+        'ra': 38.1e-3/2,
+        'tf':2e-3,
+        'qx': 8*math.pi*((38.1e-3/2)**4-(38.1e-3/2-2.5e-3)**4)
     },
+    
+    "41.25mm x 2.5mm": {
+        "nombre": "41.25mm x 2.5mm",
+        "ag": 3.045*10**(-4),
+        "ix": 5.852*10**(-8),
+
+        # para completar
+        'sx': 5.852*10**(-8)/(41.25e-3/2),
+        'ra': 41.25e-3/2,
+        'tf':2.5e-3,
+        'qx':8*math.pi*((41.25e-3/2)**4-(41.25e-3/2-2.5e-3)**4)
+    },
+    
+    "44.44mm x 2mm": {
+        "nombre": "44.44mm x 2mm",
+        "ag": 2.667*10**(-4),
+        "ix": 6.129*10**(-8),
+
+        # para completar
+        'sx': 6.129*10**(-8)/(44.44e-3/2),
+        'ra': 44.44e-3/2,
+        'tf':2e-3,
+        'qx':8*math.pi*((44.44e-3/2)**4-(44.44e-3/2-2e-3)**4)
+    },
+    
+    "76.20x2": {
+        "nombre": "76.2mm x 2mm",
+        "ag": 4.662*10**(-4),
+        "ix": 32.705*10**(-8),
+
+        # para completar
+        'sx': 32.705*10**(-8)/(76.2e-3/2),
+        'ra': 76.2e-3/2,
+        'tf':2e-3,
+        'qx':8*math.pi*((76.2e-3/2)**4-(76.2e-3/2-2e-3)**4)
+    },
+    
+    "139.70x6.35": {
+        "nombre": "139.70mm x 6.35mm",
+        "ag": 26.602*10**(-4),
+        "ix": 603.66*10**(-8),
+
+        # para completar
+        'sx': 603.66*10**(-8)/(76.2e-3/2),
+        'ra': 139.70e-3/2,
+        'tf': 6.35e-3,
+        'qx':8*math.pi*((139.70e-3/2)**4-(139.70e-3/2-6.35e-3)**4)
+    }
 }
 
 # eleccion que elegi
-bar1 = '38.1mm x 1.6mm'
-bar2 = '38.1mm x 1.6mm'
-bar3 = '38.1mm x 1.6mm'
-bar4 = '38.1mm x 1.6mm'
-bar5 = '38.1mm x 1.6mm'
+bar1 = '38.1mm x 2mm'
+bar2 = '38.1mm x 2mm'
+bar3 = '38.1mm x 2mm'
+bar4 = '38.1mm x 2mm'
+bar5 = '38.1mm x 2mm'
 bar6 = '38.1mm x 2mm'
 bar7 = '38.1mm x 2mm'
 bar8 = '38.1mm x 2mm'
 bar9 = '38.1mm x 2mm'
-bar10 = '38.1mm x 2.5mm'
+bar10 = '38.1mm x 2mm'
 bar11 = '38.1mm x 2mm'
-bar12 = '38.1mm x 2.5mm'
+bar12 = '38.1mm x 2mm'
 bar13 = '38.1mm x 2mm'
-bar14 = '38.1mm x 1.6mm'
-bar15 = '38.1mm x 1.6mm'
+bar14 = '38.1mm x 2mm'
+bar15 = '38.1mm x 2mm'
 bar16 = '38.1mm x 2mm'
 bar17 = '38.1mm x 2mm'
-bar18 = '38.1mm x 2.5mm'
-bar19 = '38.1mm x 1.6mm'
-bar20 = '38.1mm x 1.6mm'
-bar21 = '38.1mm x 2mm'
-bar22 = '38.1mm x 2mm'
-bar23 = '38.1mm x 2mm'
-bar24 = '38.1mm x 2.5mm'
-bar25 = '38.1mm x 2.5mm'
-bar26 = '38.1mm x 2.5mm'
-bar27 = '38.1mm x 2.5mm'
+bar18 = '41.25mm x 2.5mm'
+bar19 = '41.25mm x 2.5mm'
+bar20 = '41.25mm x 2.5mm'
+bar21 = '41.25mm x 2.5mm'
+bar22 = '41.25mm x 2.5mm'
+bar23 = '41.25mm x 2.5mm'
+bar24 = '41.25mm x 2.5mm'
+bar25 = '38.1mm x 2mm'
+bar26 = '38.1mm x 2mm'
+bar27 = '38.1mm x 2mm'
 bar28 = '38.1mm x 2mm'
 bar29 = '38.1mm x 2mm'
-bar30 = '38.1mm x 2.5mm'
-bar31 = '38.1mm x 2.5mm'
-bar32 = '38.1mm x 2.5mm'
-bar33 = '38.1mm x 2.5mm'
+bar30 = '38.1mm x 2mm'
+bar31 = '38.1mm x 2mm'
+bar32 = '38.1mm x 2mm'
+bar33 = '38.1mm x 2mm'
 
 # estructura2 del tp
 datos = {
@@ -111,10 +159,10 @@ datos = {
         [0, True],
 
         # 10
-        [0, True],
+        [0, False],
 
         # 11
-        [0, True],
+        [0, False],
 
         # 12
         [0, True],
@@ -138,10 +186,10 @@ datos = {
         [0, True],
 
         # 19
-        [0, True],
+        [0, False],
 
         # 20
-        [0, True],
+        [0, False],
 
         # 21
         [0, True],
@@ -201,10 +249,10 @@ datos = {
         [0, True],
 
         # 40
-        [0, True],
+        [0, False],
 
         # 41
-        [0, True],
+        [0, False],
 
         # 42
         [0, True],
@@ -219,10 +267,10 @@ datos = {
         [0, True],
 
         # 46
-        [0, True],
+        [0, False],
 
         # 47
-        [0, True],
+        [0, False],
 
         # 48
         [0, True],

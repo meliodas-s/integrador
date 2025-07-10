@@ -220,4 +220,3 @@ class Barra:
         ecu += self.cah.nor
         ecu = ecu.subs({self.cav.vrl: self.lar})
         self.nor = ecu
-        print(f'Barra{self.bar}: normal:{self.nor}')

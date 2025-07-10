@@ -13,14 +13,20 @@ class GrfEst(Grafica):
 
     def graficar(self, config=True):
         # lienzo
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(20,20))
         self.fig = fig
         self.axe = ax
         # barras
         for i in self.lba:
             ax.plot(
                 [i.xin, i.xfi], [i.yin, i.yfi],
-                linewidth=2,
+                linewidth=4,
+                color='gray',
+                alpha=0.7
+            )
+            ax.plot(
+                [i.xin, i.xfi], [i.yin, i.yfi],
+                linewidth=1.5,
                 color='gray',
                 alpha=0.9
             )

@@ -270,28 +270,35 @@ class Rock():
 
         if pri:
             self.imprimi()
+            
+        self.graficar = False
 
     def imprimi(self):
 
-        hlp.col("Matriz de rigidez")
-        print(self.rig.to_string())
+        # hlp.col("Matriz de rigidez")
+        # print(self.rig.to_string())
 
-        hlp.col("Matriz de Fuerzas:")
-        sp.pprint(self.min)
+        # hlp.col("Matriz de Fuerzas:")
+        # sp.pprint(self.min)
 
-        hlp.col("Matriz de desplazamiento:")
-        sp.pprint(self.mde)
+        # hlp.col("Matriz de desplazamiento:")
+        # sp.pprint(self.mde)
 
         hlp.col("Soluciones:")
-        sp.pprint(self.ecu)
+        lef = self.ecu.lhs.tolist()
+        for i, fila in enumerate(self.ecu.rhs.tolist()):
+            for j, val in enumerate(fila):
+                print(f"{lef[i]}:{val:.3e}")
 
-        for i in self.lba:
-            hlp.col(f"Barra: {i.bar}")
-            hlp.col(f"Matriz sistema global:")
-            print(i.rgi.to_string())
+        sp.pprint(self.ecu.rhs)
 
-            hlp.col(f"Esfuerzos:")
-            sp.pprint(i.esf)
+        # for i in self.lba:
+        #     hlp.col(f"Barra: {i.bar}")
+        #     hlp.col(f"Matriz sistema global:")
+        #     print(i.rgi.to_string())
+
+        #     hlp.col(f"Esfuerzos:")
+        #     sp.pprint(i.esf)
 
     def car_bar(self):
         '''Funcion encargada de cargar barras'''
@@ -346,11 +353,9 @@ class Rock():
 
             # gravedad Nm/s2
             case 'h':
-                print(self.pes)
                 pass
 
             case 'v':
-                print(self.pes)
                 for bar in self.lba:
                     bar.mas = self.pes[bar.bar]
 
@@ -380,49 +385,39 @@ class Rock():
                     cag.append([bar.bar, 1, round(cargvy, 5)])
                     cag.append([bar.bar, 2, round(cargvx, 5)])
 
-                    print(
-                        f"""
-                        bar{bar.bar}
-                            masa:{bar.mas}
-                            carg:{cargv}
-                            rad:{bar.ang}
-                            qx:{cargvx}
-                            qy:{cargvy}
-                            v:{qv}
-                            mb: {mof}
-                            ma: {moi}
-                            lar{bar.lar}
-                        """)
-
             case 'n':
                 pass
 
     def grf_est(self):
         gre = GrfEst(self.lba, self.lso, self.conf)
-        gre.graficar()
-        gre.guardar(gre.fig, 'gre.png')
-        gre.muestra()
+        if self.graficar:
+            gre.graficar()
+            # gre.guardar(gre.fig, 'gre.png')
+            gre.muestra()
 
     def grf_mom(self):
         grm = GrfMom(self.lba, self.lso, self.conf)
         grm.cargado()
-        grm.graficar()
-        grm.guardar(grm.fig, 'grm.png')
-        grm.muestra()
+        if self.graficar:
+            grm.graficar()
+            grm.guardar(grm.fig, 'grm.pdf')
+            grm.muestra()
 
     def grf_nor(self):
         grn = GrfNor(self.lba, self.lso, self.conf)
         grn.cargado()
-        grn.graficar()
-        grn.guardar(grn.fig, 'grn.png')
-        grn.muestra()
+        if self.graficar:
+            grn.graficar()
+            grn.guardar(grn.fig, 'grn.pdf')
+            grn.muestra()
 
     def grf_cor(self):
         grc = GrfCor(self.lba, self.lso, self.conf)
         grc.cargado()
-        grc.graficar()
-        grc.guardar(grc.fig, 'grc.png')
-        grc.muestra()
+        if self.graficar:
+            grc.graficar()
+            grc.guardar(grc.fig, 'grc.pdf')
+            grc.muestra()
 
     # def grf_des(self):
     #     pass

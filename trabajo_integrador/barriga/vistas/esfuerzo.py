@@ -51,10 +51,22 @@ class GrfEsf(Grafica):
             self.axe.fill_between(
                 x_vals,
                 y_vals,
-                alpha=0.7,
+                alpha=0.3,
                 transform=i[2] + self.axe.transData,
-                zorder=19
+                zorder=19,
+                ec = 'black',
+                lw=0.7
             )
+            self.axe.plot(
+                x_vals,
+                y_vals,
+                alpha=0.9,
+                transform=i[2] + self.axe.transData,
+                zorder=19,
+                color = 'black',
+                lw=0.6
+            )
+
 
             # graficar minimos maximos y ceros
             self.grafmax(
@@ -74,11 +86,15 @@ class GrfEsf(Grafica):
             self.txs,
             x=x,
             y=y,
-            expand=(1.5, 3),
+            expand=(2, 3),
             expand_text=(2, 3),
-            expand_points=(1, 2),
-            force_text=(0.4, 0.9),
-            force_points=(0.1, 0.4)
+            explode_radius = 1000,
+            force_explode = (0.6,0.9),
+            force_text=(1, 20),
+            max_move=(50, 50),
+            only_move = {"explode": "xy","text": "xy"}
+            # iter_lim=300,
+            # time_lim=15,   
         )
 
         # Dibujar manualmente las flechas desde el texto movido al punto original
@@ -269,7 +285,7 @@ class GrfEsf(Grafica):
 class GrfMom(GrfEsf):
     def __init__(self, lba, lso, conf: Conf):
         super().__init__(lba, lso, conf)
-        self.tit = f'Momento $1[m]={self.con.escm:.4}[N\\cdot m]$'
+        self.tit = f'(Situacion3.grafico5) Momento $1[m]={self.con.escm:.4}[N\\cdot m]$'
 
     def cargado(self):
         for i in self.lba:
@@ -281,7 +297,7 @@ class GrfMom(GrfEsf):
 class GrfNor(GrfEsf):
     def __init__(self, lba, lso, conf: Conf):
         super().__init__(lba, lso, conf)
-        self.tit = f'Normal $1[m]={self.con.escn:.4}[N]$'
+        self.tit = f'(Situacion3.grafico6) Normal $1[m]={self.con.escn:.4}[N]$'
 
     def cargado(self):
         for i in self.lba:
@@ -293,7 +309,7 @@ class GrfNor(GrfEsf):
 class GrfCor(GrfEsf):
     def __init__(self, lba, lso, conf: Conf):
         super().__init__(lba, lso, conf)
-        self.tit = f'Cortante $1[m]={self.con.escq:.4}[N]$'
+        self.tit = f'(Situacion3.grafico3) Cortante $1[m]={self.con.escq:.4}[N]$'
 
     def cargado(self):
         for i in self.lba:

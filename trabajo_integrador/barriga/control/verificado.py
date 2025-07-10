@@ -53,10 +53,6 @@ class Verificado:
     def veri(self):
         col = self.col
         for i in self.lba:
-            print(i.bar)
-            print(i.mom)
-            print(i.cor)
-            print(i.nor)
             for j in range(4):
 
                 # reemplazdo de x
@@ -71,11 +67,11 @@ class Verificado:
                 self.mve.at[inx, col[2]] = np.float64(i.cor.subs({i.vrx: rdx}))
                 self.mve.at[inx, col[3]] = np.float64(i.mom.subs({i.vrx: rdx}))
                 self.mve.at[inx, col[6]] = i.desig['nombre']
-                self.mve.at[inx, col[7]] = 2*i.desig['tf']
-                self.mve.at[inx, col[8]] = 2*i.desig['ag']
-                self.mve.at[inx, col[9]] = 2*i.desig['sx']
-                self.mve.at[inx, col[10]] = 2*i.desig['ix']
-                self.mve.at[inx, col[11]] = 2*i.desig['qx']
+                self.mve.at[inx, col[7]] = i.desig['tf']
+                self.mve.at[inx, col[8]] = i.desig['ag']
+                self.mve.at[inx, col[9]] = i.desig['sx']
+                self.mve.at[inx, col[10]] = i.desig['ix']
+                self.mve.at[inx, col[11]] = i.desig['qx']
         
         self.mve[col[4]] = np.abs(self.mve[col[1]]/self.rca).map(lambda x: np.float64(x))
         self.mve[col[5]] = np.abs(self.mve[col[3]]/self.rca).map(lambda x: np.float64(x))
@@ -94,6 +90,7 @@ class Verificado:
         # verifico tau
         self.mve[r'$\tau$ verifica'] = 'no cumple'
         self.mve.loc[self.rct > self.mve[col[13]], r'$\tau$ verifica'] = 'cumple'
+        # self.mve[r'diferencia'] = self.rct - self.mve[col[13]] # > 0
         
         # verifico sigma
         self.mve[r'$\sigma$ verifica'] = 'no cumple'
@@ -108,15 +105,16 @@ class Verificado:
         self.mve[col[12]]= self.mve[col[12]].map(lambda x: f"{x:.4}")
         self.mve[col[13]]= self.mve[col[13]].map(lambda x: f"{x:.4}")
 
-        print(self.mve)
+        print(self.mve[[r'$\tau$ verifica',r'$\sigma$ verifica']].to_string())
         
     def impr(self):
         # Init a figure
-        fig, ax = plt.subplots(figsize=(20, 9))
+        plt.rcParams.update({'font.size': 4})
+        fig, ax = plt.subplots(figsize=(20, 30))
         
 
         # Configuraciones para figura
-        ax.set_title(r'$\fbox{Matriz de verificacion}$')
+        ax.set_title(r'$\fbox{(Situacion2.grafico7) Matriz de verificacion}$')
         ax.set_facecolor('#EACEC4')
         ax.set_axisbelow(True)
         fig.patch.set_facecolor('#EACEC4')
@@ -126,4 +124,4 @@ class Verificado:
         tab = Table(self.mve, ax)
 
         # Display the output
-        fig.savefig('sld_mve.png', bbox_inches='tight', dpi=200)
+        fig.savefig('sld_mve.pdf', bbox_inches='tight')

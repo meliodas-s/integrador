@@ -55,11 +55,9 @@ class Grafica:
         ax.tick_params(axis='both', labelsize=7)  # Cambia tamaño en ambos ejes
 
     def guardar(self, fig, nombre):
-        fig.set_size_inches(15, 15)
+        fig.set_size_inches(20, 20)
         fig.savefig(
             nombre,
-            dpi=300,
             bbox_inches='tight',
             pad_inches=0.2,
-            format='png',
         )

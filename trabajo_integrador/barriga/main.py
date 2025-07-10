@@ -7,12 +7,10 @@ from plottable import Table
 import pandas as pd
 import copy
 
-from .ejemplos.ejemplo4 import datos as ejemplo
+from .ejemplos.situacion3 import datos as ejemplo
 
 # Parametros
 plt.rcParams['text.usetex'] = True
-plt.rcParams['font.family'] = 'serif'
-plt.rcParams['font.serif'] = ['Computer Modern']
 plt.rcParams['text.latex.preamble'] = r'''
 \usepackage{amsmath}
 \usepackage{textgreek}
@@ -30,23 +28,23 @@ desig = ejemplo['desig']
 pesos = ejemplo['pesos']
 
 # Se crea la estructura
-mod = Rock(inc, iba, ino, car, sop, con, desig, 'v', 1, pesos=pesos, pri=False)
+mod = Rock(inc, iba, ino, car, sop, con, desig, 'n', 0, pesos=pesos, pri=True)
 
 mod.grf_est()
 mod.grf_mom()
 mod.grf_cor()
 mod.grf_nor()
 
-# # modulo para imprimir matrices
-# imp = Impresion(mod)
+# modulo para imprimir matrices
+imp = Impresion(mod)
 # imp.desp()
 # imp.fuer()
-# imp.rigi()
-# imp.incs()
+imp.rigi()
+imp.incs()
 # imp.barr()
 # imp.barg()
 
-# # modulo de verificado
-# ver = Verificado(mod)
-# ver.veri()
-# ver.impr()
+# modulo de verificado
+ver = Verificado(mod)
+ver.veri()
+ver.impr()

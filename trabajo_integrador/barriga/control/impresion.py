@@ -6,7 +6,7 @@ from plottable import Table
 
 class Impresion:
 
-    def __init__(self, rok: Rock, res=250):
+    def __init__(self, rok: Rock, res=100):
         self.rok: Rock = rok
         self.res: int = res
 
@@ -52,13 +52,14 @@ class Impresion:
 
     def rigi(self):
         # Init a figure
-        fig, ax = plt.subplots(figsize=(23, 9))
+        plt.rcParams.update({'font.size': 4})
+        fig, ax = plt.subplots(figsize=(35, 15))
 
         dff = self.rok.rig.applymap(
-            lambda x: f"{x:.4}" if isinstance(x, (float, int)) else x)
+            lambda x: f"{x:.3}" if isinstance(x, (float, int)) else x)
 
         # Configuraciones para figura
-        ax.set_title(r'$\fbox{Matriz de rigidez global}$')
+        ax.set_title(r'$\fbox{(Situacion3.grafico1) Matriz de rigidez global}$')
         ax.set_facecolor('#EACEC4')
         ax.set_axisbelow(True)
         fig.patch.set_facecolor('#EACEC4')
@@ -69,7 +70,7 @@ class Impresion:
         tab = Table(dff, ax)
 
         # Display the output
-        fig.savefig('rig.png', bbox_inches='tight', dpi=self.res)
+        fig.savefig('rig.pdf', bbox_inches='tight')
 
     def incs(self):
         # texto de la matriz incognitas
@@ -77,7 +78,7 @@ class Impresion:
 
         # Init a figure
         fig, ax = plt.subplots(figsize=(2, 1))
-        ax.text(0, 0.5, r'$\fbox{Incognitas}$', ha='center', va='bottom')
+        ax.text(0, 0.5, r'$\fbox{(Situacion3.grafico2) Incognitas}$', ha='center', va='bottom')
         ax.text(0, 0, r'\[%s\]' % ltx, ha='center', va='top')
 
         # Configuraciones para figura
@@ -89,7 +90,7 @@ class Impresion:
         ax.axis('off')
 
         # Display the output
-        fig.savefig('inc.png', bbox_inches='tight', dpi=self.res)
+        fig.savefig('inc.pdf', bbox_inches='tight')
 
     def barg(self):
         # imprime las matrices de rigidez de cada barra

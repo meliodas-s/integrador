@@ -34,7 +34,6 @@ class Carga:
                     +vrq*self.vrl/2
                     - vrq*self.vrx
                 )
-                print(f'Carga2:{self.nor}')
 
             case 3:
                 # carga triangular
