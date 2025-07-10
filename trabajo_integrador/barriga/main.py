@@ -7,7 +7,7 @@ from plottable import Table
 import pandas as pd
 import copy
 
-from .ejemplos.situacion3 import datos as ejemplo
+from .ejemplos.ejemplo2 import datos as ejemplo
 
 # Parametros
 plt.rcParams['text.usetex'] = True
@@ -36,15 +36,15 @@ mod.grf_cor()
 mod.grf_nor()
 
 # modulo para imprimir matrices
-imp = Impresion(mod)
+# imp = Impresion(mod)
 # imp.desp()
 # imp.fuer()
-imp.rigi()
-imp.incs()
+# imp.rigi()
+# imp.incs()
 # imp.barr()
 # imp.barg()
 
 # modulo de verificado
 ver = Verificado(mod)
 ver.veri()
-ver.impr()
+# ver.impr()

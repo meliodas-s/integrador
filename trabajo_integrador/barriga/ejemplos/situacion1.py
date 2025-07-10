@@ -360,7 +360,7 @@ datos = {
     },
 
 
-    # nod, imn, ifX, ifY, cox, coy
+    # ide, idm, idx, idy, cox, coy
     'ino': [
         [
             1, 3, 2, 1,

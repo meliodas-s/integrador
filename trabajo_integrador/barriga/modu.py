@@ -1,16 +1,18 @@
 # Se importan modulo
 import pandas as pd
 import numpy as np
-from . import helpers as hlp
 import sympy as sp
+from . import helpers as hlp
 from .modelos.barra import Barra
 from .modelos.carga import Carga
 from .vistas.estructura import GrfEst
 from .vistas.esfuerzo import GrfMom, GrfNor, GrfCor
 from .modelos.config import Conf
+from .control.ctr_nod import CtrN
+from .modelos.nodo import Nodo
 
 # soportes
-from .modelos.soportes import ViculoSeg, ViculoPri, viculoTer
+from .modelos.soportes import Vinculo, ViculoSeg, ViculoPri, viculoTer
 
 # clases
 from typing import Literal
@@ -25,17 +27,12 @@ class Rock():
 
     Parameters
     ----------
-    inc : array_like
-        Matriz de incógnitas. Cada fila representa una variable con las
-        columnas: (fuerza, desplazamiento).
 
-    ino : array_like
-        Matriz de índices de nodos. Cada fila representa un nodo y contiene las
-        columnas: (número de nodo, índice de momento, índice de fuerza en x,
-        índice de fuerza en y).
     '''
+    ini:pd.DataFrame
+    pes:list[float]
 
-    def cre_sop(self, soi):
+    def cre_sop(self, soi:list[int]):
         '''Funcion encargada de crear soporte
 
         Parameters
@@ -43,17 +40,23 @@ class Rock():
         soi : list
             soporte individual a crearse y guardarse.
         '''
+        tip:int
+        nod:int
+        ang:int
 
         tip = soi[0]
         nod = soi[1]
         ang = soi[2]
+
         match tip:
             case 1:
-                self.lso.append(ViculoPri(self.ini.loc[nod], ang))
+                self.lso.append(ViculoPri(self.ctn.dtf.loc[nod], ang))
             case 2:
-                self.lso.append(ViculoSeg(self.ini.loc[nod], ang))
+                self.lso.append(ViculoSeg(self.ctn.dtf.loc[nod], ang))
             case 3:
-                self.lso.append(viculoTer(self.ini.loc[nod], ang))
+                self.lso.append(viculoTer(self.ctn.dtf.loc[nod], ang))
+            case _:
+                pass    
 
     def __init__(
         self,
@@ -63,7 +66,7 @@ class Rock():
         car: list,
         sop: list,
         conf: list,
-        desig: dict,
+        desig: dict[str,int],
         tipo: TipoCarga = 'n',
         cag: int = 0,
         pesos: list = None,
@@ -73,11 +76,8 @@ class Rock():
         # input de config
         self.conf = Conf(*conf)
 
-        # dataframe con nodos
-        self.ini = None
-
         # lista con soportes
-        self.lso = None
+        self.lso :list[Vinculo | None] = list()
 
         # lista con incognitas de desplazamiento
         self.isd = None
@@ -101,7 +101,7 @@ class Rock():
         self.can = None
 
         # designaciones de barras
-        self.desig: dict = desig
+        self.desig: dict[str, int] = desig
 
         # lista de barras
         self.lba: list[Barra] = list()
@@ -126,8 +126,11 @@ class Rock():
 
         # Input nodos
         noc = ['nod', 'imn', 'ifx', 'ify', 'cox', 'coy']
-        ino = pd.DataFrame(ino, columns=noc)
-        self.ini = ino.set_index('nod')
+        self.ctn = CtrN(ino)
+        self.ctn.cargar()
+
+        # ino = pd.DataFrame(ino, columns=noc)
+        # self.ini = ino.set_index('nod')
 
         # cargo las barras
         self.car_bar()
@@ -271,7 +274,7 @@ class Rock():
         if pri:
             self.imprimi()
             
-        self.graficar = False
+        self.graficar = True
 
     def imprimi(self):
 
@@ -318,17 +321,17 @@ class Rock():
                     fil['are'],
                     fil['mod'],
                     fil['ine'],
-                    self.ini.loc[int(fil['noi']), 'imn'],
-                    self.ini.loc[int(fil['noi']), 'ifx'],
-                    self.ini.loc[int(fil['noi']), 'ify'],
-                    self.ini.loc[int(fil['nof']), 'imn'],
-                    self.ini.loc[int(fil['nof']), 'ifx'],
-                    self.ini.loc[int(fil['nof']), 'ify'],
-                    self.ini.loc[noi, 'cox'],
-                    self.ini.loc[nof, 'cox'],
+                    self.ctn.dtf.loc[int(fil['noi']), 'imn'],
+                    self.ctn.dtf.loc[int(fil['noi']), 'ifx'],
+                    self.ctn.dtf.loc[int(fil['noi']), 'ify'],
+                    self.ctn.dtf.loc[int(fil['nof']), 'imn'],
+                    self.ctn.dtf.loc[int(fil['nof']), 'ifx'],
+                    self.ctn.dtf.loc[int(fil['nof']), 'ify'],
+                    self.ctn.dtf.loc[noi, 'cox'],
+                    self.ctn.dtf.loc[nof, 'cox'],
                     desig=self.desig[int(fil['bar'])],
-                    yfi=self.ini.loc[nof, 'coy'],
-                    yin=self.ini.loc[noi, 'coy'],
+                    yfi=self.ctn.dtf.loc[nof, 'coy'],
+                    yin=self.ctn.dtf.loc[noi, 'coy'],
                 ))
             self.lba[idx].cal_lar()
             self.lba[idx].cal_lmx()

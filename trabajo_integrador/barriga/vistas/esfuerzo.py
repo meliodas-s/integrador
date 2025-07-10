@@ -285,7 +285,7 @@ class GrfEsf(Grafica):
 class GrfMom(GrfEsf):
     def __init__(self, lba, lso, conf: Conf):
         super().__init__(lba, lso, conf)
-        self.tit = f'(Situacion3.grafico5) Momento $1[m]={self.con.escm:.4}[N\\cdot m]$'
+        self.tit = f'Momento $1[m]={self.con.escm:.4}[N\\cdot m]$'
 
     def cargado(self):
         for i in self.lba:
@@ -297,7 +297,7 @@ class GrfMom(GrfEsf):
 class GrfNor(GrfEsf):
     def __init__(self, lba, lso, conf: Conf):
         super().__init__(lba, lso, conf)
-        self.tit = f'(Situacion3.grafico6) Normal $1[m]={self.con.escn:.4}[N]$'
+        self.tit = f'Normal $1[m]={self.con.escn:.4}[N]$'
 
     def cargado(self):
         for i in self.lba:
@@ -309,7 +309,7 @@ class GrfNor(GrfEsf):
 class GrfCor(GrfEsf):
     def __init__(self, lba, lso, conf: Conf):
         super().__init__(lba, lso, conf)
-        self.tit = f'(Situacion3.grafico3) Cortante $1[m]={self.con.escq:.4}[N]$'
+        self.tit = f'Cortante $1[m]={self.con.escq:.4}[N]$'
 
     def cargado(self):
         for i in self.lba:
