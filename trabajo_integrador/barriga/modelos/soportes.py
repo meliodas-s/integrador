@@ -10,10 +10,10 @@ from copy import deepcopy
 
 
 class Vinculo:
-    def __init__(self, nod:pd.Series[float], ang:float):
+    def __init__(self, nod, ang:float):
 
         # Datos para graficar
-        self.nod:pd.Series[float] = nod
+        self.nod = nod
         self.ang:float = ang
         self.dax = float(nod.loc['cox'])
         self.day = float(nod.loc['coy'])

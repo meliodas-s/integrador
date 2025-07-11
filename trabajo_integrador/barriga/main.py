@@ -1,13 +1,12 @@
 from .modu import Rock
 from .control.impresion import Impresion
-from .control.cargadorc import Cargadorc
 from .control.verificado import Verificado
 import matplotlib.pyplot as plt
 from plottable import Table
 import pandas as pd
 import copy
 
-from .ejemplos.ejemplo2 import datos as ejemplo
+from .ejemplos.predimensionado import datos as ejemplo
 
 # Parametros
 plt.rcParams['text.usetex'] = True
@@ -28,7 +27,7 @@ desig = ejemplo['desig']
 pesos = ejemplo['pesos']
 
 # Se crea la estructura
-mod = Rock(inc, iba, ino, car, sop, con, desig, 'n', 0, pesos=pesos, pri=True)
+mod = Rock(inc, iba, ino, car, sop, con, desig, 'v', 1, pesos=pesos, pri=True, gra=True)
 
 mod.grf_est()
 mod.grf_mom()

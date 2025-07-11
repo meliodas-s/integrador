@@ -48,7 +48,7 @@ class Rock():
         nod = soi[1]
         ang = soi[2]
         
-        nol:pd.Series[float] = cast(pd.Series[float],self.ctn.dtf.loc[nod])
+        nol= self.ctn.dtf.loc[nod]
 
         match tip:
             case 1:
@@ -72,7 +72,8 @@ class Rock():
         tipo: TipoCarga = 'n',
         cag: int = 0,
         pesos: list = None,
-        pri=False
+        pri=False,
+        gra=False,
     ):
 
         # input de config
@@ -276,18 +277,18 @@ class Rock():
         if pri:
             self.imprimi()
             
-        self.graficar = True
+        self.graficar = gra
 
     def imprimi(self):
 
-        # hlp.col("Matriz de rigidez")
-        # print(self.rig.to_string())
+        hlp.col("Matriz de rigidez")
+        print(self.rig.to_string())
 
-        # hlp.col("Matriz de Fuerzas:")
-        # sp.pprint(self.min)
+        hlp.col("Matriz de Fuerzas:")
+        sp.pprint(self.min)
 
-        # hlp.col("Matriz de desplazamiento:")
-        # sp.pprint(self.mde)
+        hlp.col("Matriz de desplazamiento:")
+        sp.pprint(self.mde)
 
         hlp.col("Soluciones:")
         lef = self.ecu.lhs.tolist()
@@ -297,13 +298,13 @@ class Rock():
 
         sp.pprint(self.ecu.rhs)
 
-        # for i in self.lba:
-        #     hlp.col(f"Barra: {i.bar}")
-        #     hlp.col(f"Matriz sistema global:")
-        #     print(i.rgi.to_string())
+        for i in self.lba:
+            hlp.col(f"Barra: {i.bar}")
+            hlp.col(f"Matriz sistema global:")
+            print(i.rgi.to_string())
 
-        #     hlp.col(f"Esfuerzos:")
-        #     sp.pprint(i.esf)
+            hlp.col(f"Esfuerzos:")
+            sp.pprint(i.esf)
 
     def car_bar(self):
         '''Funcion encargada de cargar barras'''
