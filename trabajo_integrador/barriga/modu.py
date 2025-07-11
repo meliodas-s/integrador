@@ -9,7 +9,7 @@ from .vistas.estructura import GrfEst
 from .vistas.esfuerzo import GrfMom, GrfNor, GrfCor
 from .modelos.config import Conf
 from .control.ctr_nod import CtrN
-from .modelos.nodo import Nodo
+from typing import cast
 
 # soportes
 from .modelos.soportes import Vinculo, ViculoSeg, ViculoPri, viculoTer
@@ -47,14 +47,16 @@ class Rock():
         tip = soi[0]
         nod = soi[1]
         ang = soi[2]
+        
+        nol:pd.Series[float] = cast(pd.Series[float],self.ctn.dtf.loc[nod])
 
         match tip:
             case 1:
-                self.lso.append(ViculoPri(self.ctn.dtf.loc[nod], ang))
+                self.lso.append(ViculoPri(nol, ang))
             case 2:
-                self.lso.append(ViculoSeg(self.ctn.dtf.loc[nod], ang))
+                self.lso.append(ViculoSeg(nol, ang))
             case 3:
-                self.lso.append(viculoTer(self.ctn.dtf.loc[nod], ang))
+                self.lso.append(viculoTer(nol, ang))
             case _:
                 pass    
 

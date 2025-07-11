@@ -3,17 +3,18 @@ from matplotlib.path import Path
 from matplotlib.collections import PatchCollection
 import matplotlib.patches as patches
 import numpy as np
+import pandas as pd
 
 # Miselaneos
 from copy import deepcopy
 
 
 class Vinculo:
-    def __init__(self, nod, ang):
+    def __init__(self, nod:pd.Series[float], ang:float):
 
         # Datos para graficar
-        self.nod = nod
-        self.ang = ang
+        self.nod:pd.Series[float] = nod
+        self.ang:float = ang
         self.dax = float(nod.loc['cox'])
         self.day = float(nod.loc['coy'])
         

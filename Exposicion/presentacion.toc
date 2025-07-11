@@ -1,0 +1,2 @@
+\beamer@sectionintoc {1}{Introducción}{3}{0}{1}
+\beamer@sectionintoc {2}{Desarrollo inicial de la resolucion}{4}{0}{2}
