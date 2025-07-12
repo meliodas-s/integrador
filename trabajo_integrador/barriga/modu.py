@@ -32,7 +32,7 @@ class Rock():
     isf: incognitas de esfuerzos
     rig: matriz de rigidez de la estructura
     mde: matriz de desplazamiento de la estructura
-    min: matriz de incofnitas de fuerzas
+    min: matriz de incofnitas de fuerzasd
     ecu: ecuaciones e igualdades, resultados
     can: cantidad de barras
     desig: diccionario de designanciones de barra
