@@ -6,7 +6,7 @@ from plottable import Table
 import pandas as pd
 import copy
 
-from .ejemplos.predimensionado import datos as ejemplo
+from .ejemplos.ejemplo2 import datos as ejemplo
 
 # Parametros
 plt.rcParams['text.usetex'] = True
@@ -27,7 +27,7 @@ desig = ejemplo['desig']
 pesos = ejemplo['pesos']
 
 # Se crea la estructura
-mod = Rock(inc, iba, ino, car, sop, con, desig, 'v', 1, pesos=pesos, pri=True, gra=True)
+mod = Rock(inc, iba, ino, car, sop, con, desig, 'n', 1, pesos=pesos, pri=True, gra=True)
 
 mod.grf_est()
 mod.grf_mom()

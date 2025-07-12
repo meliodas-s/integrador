@@ -365,7 +365,6 @@ datos = {
         [
             17, 39, 38, 37,
             1.395, 1.137],
-
     ],
 
     # Cargas (bar, (1:ver, 2:hor ,3:tri), q:en positivo)

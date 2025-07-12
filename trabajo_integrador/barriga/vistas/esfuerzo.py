@@ -139,16 +139,14 @@ class GrfEsf(Grafica):
 
     def transfo(self, bar: Barra, esc):
         # se calcula el angulo
-        dx = bar.xfi - bar.xin
-        dy = bar.yfi - bar.yin
-        ara = math.atan2(dy, dx)
+        ara = bar.ang
 
         # Se crea la transformacion
         myt = (
             Affine2D()
             .scale(1, esc)
             .rotate(ara)
-            .translate(bar.xin, bar.yin)
+            .translate(bar.noi.cox, bar.noi.coy)
         )
         return myt
 

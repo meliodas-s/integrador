@@ -1,20 +1,28 @@
 import pandas as pd
 from .modelos.barra import Barra
 
-def mrb(bar:Barra, rig: pd.DataFrame):
+
+def mrb(bar: Barra, rig: pd.DataFrame):
     '''Carga la matriz de rigiddez para cada barra.
     Dada la barra y la matriz de rigidez suma sus respectivo
     aporte en cada pocision.
     '''
     # filas(indices) de momentos, fuerx, fuery
-    fid = [bar.nix, bar.niy, bar.nim, bar.nfx, bar.nfy, bar.nfm]
+    fid = [
+        bar.noi.idx,
+        bar.noi.idy,
+        bar.noi.idm,
+        bar.nof.idx,
+        bar.nof.idy,
+        bar.nof.idm,
+    ]
 
     # columnas(indices)
     cid = fid
 
     # Convierto (k) en df para coincidencia de indices.
     mrg = pd.DataFrame(bar.rig, index=fid, columns=cid)
-    
+
     # guarda la matriz indexda
     bar.rgi = mrg
 
@@ -23,7 +31,7 @@ def mrb(bar:Barra, rig: pd.DataFrame):
     rig.loc[fid, cid] = pd.DataFrame(sum, index=fid, columns=cid)
 
 
-def col(text: str, color: str='green'):
+def col(text: str, color: str = 'green'):
     colors = {
         "black":   "\033[30m",
         "red":     "\033[31m",
@@ -57,7 +65,6 @@ def col(text: str, color: str='green'):
         "reset":      "\033[0m"
     }
 
-    
-    print(f"{styles['bold']}{colors[color]}",end='')
+    print(f"{styles['bold']}{colors[color]}", end='')
     print(text)
     print("\033[0m")

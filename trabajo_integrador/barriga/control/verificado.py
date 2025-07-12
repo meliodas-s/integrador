@@ -9,6 +9,7 @@ class Verificado:
     def __init__(self, rok: Rock):
         self.rok: Rock = rok
         self.idx: list[str] = list()
+        self.lba = self.rok.ctb.lis.values()
         self.indi()
         self.col: list[str] = [
             'x',            # 0
@@ -26,7 +27,6 @@ class Verificado:
             r'$\sigma$',      # 12
             r'$\tau$',        # 13
         ]
-        self.lba = self.rok.lba
         self.mve: pd.DataFrame = pd.DataFrame(
             0,
             index=self.idx,
@@ -46,7 +46,7 @@ class Verificado:
         self.rct = self.rca/(3**(1/3))
 
     def indi(self):
-        for i in self.rok.lba:
+        for i in self.lba:
             for j in range(4):
                 self.idx.append(f'Barra{i.bar}-Punto{j}')
 

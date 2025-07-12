@@ -18,16 +18,19 @@ class CtrN:
     def __init__(self, ino: list[tuple[int, int, int, int, float, float]]):
         self.dtf = pd.DataFrame(ino, columns=self.noc)
         self.dtf.set_index('nod', inplace=True) # type: ignore
+        self.lno = {}
 
 
     def cargar(self):
-        # for _, fila in self.dtf.iterrows():
-        #     self.dtf[1] = Nodo(
-        #         fila['nod'],
-        #         fila['imn'],
-        #         fila['ifx'],
-        #         fila['ify'],
-        #         fila['cox'],
-        #         fila['coy']
-        #     )
-        pass
+        '''
+        Funcion encargada de crear los objetos nodo
+        '''
+        for ide, fila in self.dtf.iterrows():
+            self.lno[ide] = Nodo(
+                ide,
+                fila['imn'],
+                fila['ifx'],
+                fila['ify'],
+                fila['cox'],
+                fila['coy']
+            )

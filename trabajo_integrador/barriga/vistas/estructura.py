@@ -19,13 +19,13 @@ class GrfEst(Grafica):
         # barras
         for i in self.lba:
             ax.plot(
-                [i.xin, i.xfi], [i.yin, i.yfi],
+                [i.noi.cox, i.nof.cox], [i.noi.coy, i.nof.coy],
                 linewidth=4,
                 color='gray',
                 alpha=0.7
             )
             ax.plot(
-                [i.xin, i.xfi], [i.yin, i.yfi],
+                [i.noi.cox, i.nof.cox], [i.noi.coy, i.nof.coy],
                 linewidth=1.5,
                 color='gray',
                 alpha=0.9

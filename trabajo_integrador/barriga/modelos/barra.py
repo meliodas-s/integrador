@@ -3,6 +3,8 @@ from .carga import Carga0
 import numpy as np
 import sympy as sp
 import math
+from ..modelos.nodo import Nodo
+
 
 @dataclass
 class Barra:
@@ -56,27 +58,11 @@ class Barra:
         Índice global de la fuerza en Y en el nodo final.
     """
     bar: int
-    noi: int
-    nof: int
     are: float
     mod: float
     ine: float
-
-    # ids de esfuerzos en nodo cercano
-    nim: int
-    nix: int
-    niy: int
-
-    # ids de esfuerzos en nodo lejanos
-    nfm: int
-    nfx: int
-    nfy: int
-
-    # coordenadas
-    xin: float
-    xfi: float
-    yin: float
-    yfi: float
+    noi: Nodo
+    nof: Nodo
 
     # datos de designacion
     desig: dict
@@ -100,23 +86,22 @@ class Barra:
 
     # variables
     vrx = sp.symbols('x')
-    
+
     # matriz de rigidez local y global
-    ril:np.ndarray = field(default_factory=lambda: np.zeros((6, 6)))
-    rig:np.ndarray = field(default_factory=lambda: np.zeros((6, 6)))
-    
+    ril: np.ndarray = field(default_factory=lambda: np.zeros((6, 6)))
+    rig: np.ndarray = field(default_factory=lambda: np.zeros((6, 6)))
+
     # matriz de rigidez global indexada
     rgi = None
-    
+
     # angulo en radianes
     ang = None
-    
 
     def cal_lmx(self):
-        self.lmx = (self.xfi-self.xin)/self.lar
+        self.lmx = (self.nof.cox-self.noi.cox)/self.lar
 
     def cal_lmy(self):
-        self.lmy = (self.yfi-self.yin)/self.lar
+        self.lmy = (self.nof.coy-self.noi.coy)/self.lar
 
     def cal_tra(self):
         # Matris de transformacion
@@ -161,14 +146,15 @@ class Barra:
 
     def cal_ang(self):
         # Calculo la matriz de rigidez global (k) y guardo.
-                # se calcula el angulo
-        dx = self.xfi - self.xin
-        dy = self.yfi - self.yin
+        # se calcula el angulo
+        dx = self.nof.cox - self.noi.cox
+        dy = self.nof.coy - self.noi.coy
         self.ang = math.atan2(dy, dx)
 
-
     def cal_lar(self):
-        self.lar = np.sqrt((self.xfi-self.xin)**2+(self.yfi-self.yin)**2)
+        dx = self.nof.cox - self.noi.cox
+        dy = self.nof.coy - self.noi.coy
+        self.lar = np.sqrt((dx)**2 + (dy)**2)
 
     def cal_mom(self):
         '''Crea la funcion del esfuerzo de momento.
@@ -177,8 +163,8 @@ class Barra:
         '''
         if isinstance(self.cat, Carga0):
             # indice de momento inicial y final
-            nim = int(self.nim)
-            nfm = int(self.nfm)
+            nim = int(self.noi.idm)
+            nfm = int(self.nof.idm)
 
             # momento inicial y momento final
             mic = -float(self.esf.loc[nim].iloc[0])
@@ -192,8 +178,8 @@ class Barra:
 
         else:
             # tiene una carga triangular
-            nim = int(self.nim)
-            nfm = int(self.nfm)
+            nim = int(self.noi.idm)
+            nfm = int(self.nof.idm)
 
             mic = -float(self.esf.loc[nim].iloc[0])
             mfl = float(self.esf.loc[nfm].iloc[0])
@@ -208,8 +194,8 @@ class Barra:
 
     def cal_nor(self):
         # indice de momento inicial y final
-        nix = int(self.nix)
-        nfx = int(self.nfx)
+        nix = int(self.noi.idx)
+        nfx = int(self.nof.idx)
 
         # momento inicial y momento final
         mic = -float(self.esf.loc[nix].iloc[0])
