@@ -10,6 +10,7 @@ from .vistas.esfuerzo import GrfMom, GrfNor, GrfCor
 from .modelos.config import Conf
 from .control.ctr_nod import CtrN
 from .control.ctr_bar import CtrB
+from .modelos.matri import SolvIt
 
 # soportes
 from .modelos.soportes import Vinculo, ViculoSeg, ViculoPri, viculoTer
@@ -32,7 +33,7 @@ class Rock():
     isf: incognitas de esfuerzos
     rig: matriz de rigidez de la estructura
     mde: matriz de desplazamiento de la estructura
-    min: matriz de incofnitas de fuerzasd
+    min: matriz de incofnitas de fuerzas
     ecu: ecuaciones e igualdades, resultados
     can: cantidad de barras
     desig: diccionario de designanciones de barra
@@ -71,9 +72,7 @@ class Rock():
         self.pes: list[float] = pesos
 
         # Input fuerzas e incognitas (encognitas)
-        ncc = ['fue', 'des']
-        self.inc = pd.DataFrame(incog, columns=ncc)
-        print(self.inc)
+        self.sol = SolvIt(incog)
 
         # Input nodos
         self.ctn = CtrN(ino)
@@ -97,15 +96,6 @@ class Rock():
         for i in sop:
             self.cre_sop(i)
 
-        # Cantidad de libertades
-        self.cal = self.inc.shape[0]
-
-        # Numeracion del 1 al n(numero de libertades)
-        nli = np.arange(1, self.cal+1)
-
-        # Crear data-frame de rigidez
-        self.rig = pd.DataFrame(0, index=nli, columns=nli).astype(float)
-
         # se suma todo en la matriz de rigidez
         for bar in self.ctb.lis.values():
             hlp.mrb(bar, self.rig)
@@ -124,6 +114,7 @@ class Rock():
         # incognitas totales
         igt = []
 
+        ## Controlador de ecuaciones
         # se crean los datos de las incognitas
         for idx, fil in self.inc.iterrows():
             if not fil['des']:
@@ -154,6 +145,7 @@ class Rock():
         res = rgs * mde
         eqs = []
 
+        ## Controlador de ecuaciones
         # cargo eqs con los items de res
         for idx in range(res.rows):
             eqs.append(sp.Eq(min[idx], res[idx]))
@@ -166,12 +158,14 @@ class Rock():
         self.isd = isd
         self.isf = isf
 
+        ## Controlador de ecuciones
         # guardo la ecuaciond de igualdades
         self.ecu = sp.Eq(
             sp.Matrix(list(sol.keys())),
             sp.Matrix(list(sol.values()))
         )
 
+        # Controlador de ecuaciones
         # consigo los valores de las fuerzas en las barras
         for bar in self.ctb.lis.values():
 
