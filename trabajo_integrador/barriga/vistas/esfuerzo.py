@@ -54,6 +54,7 @@ class GrfEsf(Grafica):
                 alpha=0.3,
                 transform=i[2] + self.axe.transData,
                 zorder=19,
+                color='orange',
                 ec = 'black',
                 lw=0.7
             )

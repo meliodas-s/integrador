@@ -71,9 +71,6 @@ class Rock():
         self.cag = cag
         self.pes: list[float] = pesos
 
-        # Input fuerzas e incognitas (encognitas)
-        self.sol = SolvIt(incog)
-
         # Input nodos
         self.ctn = CtrN(ino)
         self.ctn.cargar()
@@ -83,140 +80,22 @@ class Rock():
         self.ctb.cargar(self.ctn.lno, desig)
         self.can = self.ctb.dtf.shape[0]
 
-        # cargo los desplazamientos
-        self.car_des(car)
-
-        # input de cargas
-        self.cgs: list[Carga] = []
-        for i in car:
-            self.cgs.append(Carga(i[0], i[1], i[2]))
-
-        # input de soportes
+        # Controlador de graficos (Soportes)
         self.lso = list()
         for i in sop:
             self.cre_sop(i)
 
-        # se suma todo en la matriz de rigidez
-        for bar in self.ctb.lis.values():
-            hlp.mrb(bar, self.rig)
-
-        # se crea matriz symbolica rigSimbolica
-        rgs = sp.Matrix(self.rig.values)
-
-        # defino matrizes de Desplaza e Incog.(fuerzas)
-        mde = sp.Matrix()
-        min = sp.Matrix()
-
-        # defino incog. simbolicas de Desplaza y Fuerzas
-        isd = sp.Matrix()
-        isf = sp.Matrix()
-
-        # incognitas totales
-        igt = []
-
-        ## Controlador de ecuaciones
-        # se crean los datos de las incognitas
-        for idx, fil in self.inc.iterrows():
-            if not fil['des']:
-                fue = sp.symbols(f'Q_{idx + 1}')
-                mde = mde.col_join(sp.Matrix([0]))
-                min = min.col_join(sp.Matrix([fue]))
-
-                # Agrego la incognita fuerza
-                isd = isd.col_join(sp.Matrix([0]))
-                isf = isf.col_join(sp.Matrix([fue]))
-                igt.append(fue)
-
-            else:
-                des = sp.symbols(f'D_{idx + 1}')
-                mde = mde.col_join(sp.Matrix([des]))
-                min = min.col_join(sp.Matrix([fil['fue']]))
-
-                # Agrego la incognita despla
-                isd = isd.col_join(sp.Matrix([des]))
-                isf = isf.col_join(sp.Matrix([fil['fue']]))
-                igt.append(des)
-
-        # guardo datos
-        self.mde = mde
-        self.min = min
-
-        # matriz resultante de incognitas
-        res = rgs * mde
-        eqs = []
-
-        ## Controlador de ecuaciones
-        # cargo eqs con los items de res
-        for idx in range(res.rows):
-            eqs.append(sp.Eq(min[idx], res[idx]))
-
-        sol = sp.solve(eqs, igt)
-        isd = isd.subs(sol)
-        isf = isf.subs(sol)
-
-        # guardo las soluciones
-        self.isd = isd
-        self.isf = isf
-
-        ## Controlador de ecuciones
-        # guardo la ecuaciond de igualdades
-        self.ecu = sp.Eq(
-            sp.Matrix(list(sol.keys())),
-            sp.Matrix(list(sol.values()))
-        )
-
-        # Controlador de ecuaciones
-        # consigo los valores de las fuerzas en las barras
-        for bar in self.ctb.lis.values():
-
-            # desplazamiento de los nodos en x e y
-            den = [
-                bar.noi.idx,
-                bar.noi.idy,
-                bar.noi.idm,
-                bar.nof.idx,
-                bar.nof.idy,
-                bar.nof.idm,]
-
-            # vector de desplazamientos [DNx, DNy, DFx, DFy]
-            vde = np.array(
-                [
-                    isd[bar.noi.idx-1],
-                    isd[bar.noi.idy-1],
-                    isd[bar.noi.idm-1],
-                    isd[bar.nof.idx-1],
-                    isd[bar.nof.idy-1],
-                    isd[bar.nof.idm-1],
-                ]
-            )
-
-            # cálculo del esfuerzo de la barra
-            esf = (bar.ril@bar.tra)@vde
-            esf = pd.DataFrame(esf, index=den, columns=[f'{bar.bar}'])
-
-            # guardo los valores
-            bar.esf = esf
-
-        # momentos en barras con cargas
-        for cag in self.cgs:
-
-            # indice de barra
-            iba = cag.bar
-
-            # barra en cuestion
-            bar = self.ctb.lis[iba]
-
-            match cag.tip:
-                case 1:
-                    bar.cav = cag
-                case 2:
-                    bar.cah = cag
-                case 3:
-                    bar.cat = cag
-
+        # Controlador de ecuaciones(soluciona)
+        self.sol = SolvIt(incog, self.sit, car)
+        self.sol.carga(self.ctb.lis)
+        self.sol.creas()
+        self.sol.cargi()
+        self.sol.solvi()
+        self.sol.solvi_bar(self.ctb.lis)
+        self.sol.carga_bar(self.ctb.lis)
         self.ctb.cal()
 
-        if pri:
+        if False:
             self.imprimi()
 
         self.graficar = gra
@@ -247,56 +126,6 @@ class Rock():
 
             hlp.col(f"Esfuerzos:")
             sp.pprint(i.esf)
-
-    def car_des(self, cag: list):
-        '''funcion encargada de cargar nodos
-        dependiendo si es una situacion de carga verticales
-        o cargas horizonales. Ejemplo: un choque o el peso
-        mismo de la estructura
-
-        - Por convencion el signo de la carga vertical
-        ira positivo si es que la carga va de arriba a abajo
-        '''
-        grav = 9.8
-
-        match self.sit:
-
-            # gravedad Nm/s2
-            case 'h':
-                pass
-
-            case 'v':
-                for bar in self.lba:
-                    bar.mas = self.pes[bar.bar]
-
-                    # creo carga vertical [N/m2]
-                    cargv = grav*self.cag*bar.mas/bar.lar
-
-                    # componentes en x e y
-                    cargvx = -cargv*np.sin(bar.ang)
-                    cargvy = cargv*np.cos(bar.ang)
-
-                    # fuerzas verticales en ambos nodods
-                    qv = cargv*bar.lar/2
-
-                    # momento en a (nodo incia)
-                    moi = -cargvy*bar.lar**2/12
-
-                    # momento en a (nodo final)
-                    mof = cargvy*bar.lar**2/12
-
-                    # se suman los datos a las incognitas
-                    self.inc.at[bar.noi.idm-1, 'fue'] += round(moi, 5)
-                    self.inc.at[bar.nof.idm-1, 'fue'] += round(mof, 5)
-                    self.inc.at[bar.noi.idy-1, 'fue'] += -qv
-                    self.inc.at[bar.nof.idy-1, 'fue'] += -qv
-
-                    # se guardan las cargas
-                    cag.append([bar.bar, 1, round(cargvy, 5)])
-                    cag.append([bar.bar, 2, round(cargvx, 5)])
-
-            case 'n':
-                pass
 
     def cre_sop(self, soi: list[int]):
         '''Funcion encargada de crear soporte
