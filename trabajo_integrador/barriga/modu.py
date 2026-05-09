@@ -40,6 +40,7 @@ class Rock():
     sit: TipoCarga, situacion a analizar
     cag: multiplos de fuerzas g
     pes: pesos por barra
+    car: Lista con cargas si se ingresan manual.
     '''
 
     def __init__(
@@ -52,20 +53,13 @@ class Rock():
         conf: list,
         desig: dict[str, int],
         tipo: TipoCarga = 'n',
-        cag: int = 0,
+        cag: float = 0,
         pesos: list = None,
         pri=False,
         gra=False,
     ):
         self.conf = Conf(*conf)
         self.lso: list[Vinculo | None] = list()
-        self.isd = None
-        self.isf = None
-        self.rig = None
-        self.mde = None
-        self.min = None
-        self.ecu = None
-        self.can = None
         self.desig: dict[str, int] = desig
         self.sit: TipoCarga = tipo
         self.cag = cag
@@ -78,7 +72,6 @@ class Rock():
         # cargo las barras
         self.ctb = CtrB(iba)
         self.ctb.cargar(self.ctn.lno, desig)
-        self.can = self.ctb.dtf.shape[0]
 
         # Controlador de graficos (Soportes)
         self.lso = list()
@@ -89,13 +82,15 @@ class Rock():
         self.sol = SolvIt(incog, self.sit, car)
         self.sol.carga(self.ctb.lis)
         self.sol.creas()
+        self.sol.car_des(cag, tipo, self.ctb.lis, self.pes)
+        self.sol.car_car()
         self.sol.cargi()
         self.sol.solvi()
         self.sol.solvi_bar(self.ctb.lis)
         self.sol.carga_bar(self.ctb.lis)
         self.ctb.cal()
 
-        if False:
+        if pri:
             self.imprimi()
 
         self.graficar = gra
@@ -103,21 +98,19 @@ class Rock():
     def imprimi(self):
 
         hlp.col("Matriz de rigidez")
-        print(self.rig.to_string())
+        print(self.sol.rig.to_string())
 
         hlp.col("Matriz de Fuerzas:")
-        sp.pprint(self.min)
+        sp.pprint(self.sol.min)
 
         hlp.col("Matriz de desplazamiento:")
-        sp.pprint(self.mde)
+        sp.pprint(self.sol.mde)
 
         hlp.col("Soluciones:")
-        lef = self.ecu.lhs.tolist()
-        for i, fila in enumerate(self.ecu.rhs.tolist()):
+        lef = self.sol.ecu.lhs.tolist()
+        for i, fila in enumerate(self.sol.ecu.rhs.tolist()):
             for j, val in enumerate(fila):
                 print(f"{lef[i]}:{val:.3e}")
-
-        sp.pprint(self.ecu.rhs)
 
         for i in self.ctb.lis.values():
             hlp.col(f"Barra: {i.bar}")

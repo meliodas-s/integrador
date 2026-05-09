@@ -12,6 +12,7 @@ class SolvIt:
     ----------
     inc: incognitas de fuerza y desplazamientos [[float,bool],...]
     sit: situacion que se plantea (Cargas vertical o horizontal)
+    car: cargas en listas [[int,int...]...]
     """
 
     def __init__(self, incog, sit, car):
@@ -29,16 +30,23 @@ class SolvIt:
 
         # Crear data-frame de rigidez
         self.rig = pd.DataFrame(0, index=nli, columns=nli).astype(float)
+        
+        # cargas en formato lista
+        self.car = car
 
-        # cargo los desplazamientos
-        self.car_des(car)
-
-        # Controlador de cargas (si la situacion es 'n') (no va aqui)
+        # Lista de cargas
         self.cgs: list[Carga] = []
-        for i in car:
+
+    def car_car(self):
+        # Controlador de cargas (si la situacion es 'n')
+        # Si la situacion es n, car es una lista vacia.
+        # (no va aqui)
+        # si la situacion es otra tambien se ejecuta.
+        for i in self.car:
+            print(i)
             self.cgs.append(Carga(i[0], i[1], i[2]))
 
-    def car_des(self, cag: list):
+    def car_des(self, cag: float, sit: str, lba: dict[int, Barra], pes):
         '''funcion encargada de cargar nodos
         dependiendo si es una situacion de carga verticales
         o cargas horizonales. Ejemplo: un choque o el peso
@@ -46,21 +54,58 @@ class SolvIt:
 
         - Por convencion el signo de la carga vertical
         ira positivo si es que la carga va de arriba a abajo
+
+        Parameter
+        ---------
+        cag: cantidad de fuerzas g
+        sit: situacion a usar ['v','h','n']
+        lba: diccionario de barras
+        pes: lista con pesos de la barra
         '''
         grav = 9.8
 
-        match self.sit:
+        match sit:
 
             # gravedad Nm/s2
             case 'h':
-                pass
-
-            case 'v':
-                for bar in self.lba:
-                    bar.mas = self.pes[bar.bar]
+                for bar in lba.values():
+                    bar.mas = pes[bar.bar]
 
                     # creo carga vertical [N/m2]
-                    cargv = grav*self.cag*bar.mas/bar.lar
+                    cargv = grav*cag*bar.mas/bar.lar
+
+                    # componentes en x e y
+                    cargvx = cargv*np.cos(bar.ang)
+                    cargvy = cargv*np.sin(bar.ang)
+                    print(cargv)
+
+
+                    # fuerzas horizontales en ambos nodods
+                    qh = cargv*bar.lar/2
+
+                    # momento en a (nodo incia)
+                    moi = -cargvy*bar.lar**2/12
+
+                    # momento en a (nodo final)
+                    mof = cargvy*bar.lar**2/12
+
+                    # se suman los datos a las incognitas
+                    self.inc.at[bar.noi.idm-1, 'fue'] += round(moi, 5)
+                    self.inc.at[bar.nof.idm-1, 'fue'] += round(mof, 5)
+                    self.inc.at[bar.noi.idx-1, 'fue'] += qh
+                    self.inc.at[bar.nof.idx-1, 'fue'] += qh
+                    print(self.inc)
+
+                    # se guardan las cargas
+                    self.car.append([bar.bar, 1, round(cargvy, 5)])
+                    self.car.append([bar.bar, 2, round(cargvx, 5)])
+
+            case 'v':
+                for bar in lba.values():
+                    bar.mas = pes[bar.bar]
+
+                    # creo carga vertical [N/m2]
+                    cargv = grav*cag*bar.mas/bar.lar
 
                     # componentes en x e y
                     cargvx = -cargv*np.sin(bar.ang)
@@ -82,8 +127,8 @@ class SolvIt:
                     self.inc.at[bar.nof.idy-1, 'fue'] += -qv
 
                     # se guardan las cargas
-                    cag.append([bar.bar, 1, round(cargvy, 5)])
-                    cag.append([bar.bar, 2, round(cargvx, 5)])
+                    self.car.append([bar.bar, 1, round(cargvy, 5)])
+                    self.car.append([bar.bar, 2, round(cargvx, 5)])
 
             case 'n':
                 pass
@@ -232,7 +277,9 @@ class SolvIt:
 
     def carga_bar(self, lba):
         """funcion encargada de cargar las cargas 
-        en barras que las tienen.
+        en barras que las tienen. Pero esto es para 
+        su graficacion por lo que deberia ir separado
+        de esta clase.
         """
         # momentos en barras con cargas
         for cag in self.cgs:

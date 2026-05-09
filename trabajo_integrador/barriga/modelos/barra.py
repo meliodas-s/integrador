@@ -160,6 +160,15 @@ class Barra:
         '''Crea la funcion del esfuerzo de momento.
         Solo habra dos casos en estos ejemplos, o tiene una carga triangular
         o tiene una vertical o nula.
+        
+        mic = -float(...) se le cambia el signo debi-
+        do a que el metodo de matrices de rigidez utiliza la convencion
+        de que el sentido anti-horario siempre es el positivo, sin importar
+        que estemos analizando de un lado del diferencial de esfuerzo
+        o del otro. Por eso al trasladar el momento que esta ubicado en el
+        lado izquierdo del diferencial al lado derecho del trozo de la barra
+        que esta a la izqueirda del diferencial, este momento hay que
+        colocarlo con el signo contrario.
         '''
         if isinstance(self.cat, Carga0):
             # indice de momento inicial y final

@@ -24,6 +24,9 @@ env/
 
 # Archivos personales o secretos
 .env
+*.pdf
+*.ftl
+*.png
 
 
 04/

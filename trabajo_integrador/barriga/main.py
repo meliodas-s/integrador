@@ -27,12 +27,12 @@ desig = ejemplo['desig']
 pesos = ejemplo['pesos']
 
 # Se crea la estructura
-mod = Rock(inc, iba, ino, car, sop, con, desig, 'n', 1, pesos=pesos, pri=True, gra=True)
+mod = Rock(inc, iba, ino, car, sop, con, desig, 'h', 1, pesos=pesos, pri=True, gra=True)
 
-mod.grf_est()
-mod.grf_mom()
-mod.grf_cor()
-mod.grf_nor()
+# mod.grf_est()
+# mod.grf_mom()
+# mod.grf_cor()
+# mod.grf_nor()
 
 # modulo para imprimir matrices
 # imp = Impresion(mod)
@@ -46,4 +46,4 @@ mod.grf_nor()
 # modulo de verificado
 ver = Verificado(mod)
 ver.veri()
-# ver.impr()
+ver.impr()

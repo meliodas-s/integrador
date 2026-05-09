@@ -72,9 +72,9 @@ denom = {
 }
 
 # eleccion que elegi
-bar1 = 'upn80'
+bar1 = 'upn160'
 bar2 = 'upn80'
-bar3 = 'upn80'
+bar3 = 'upn160'
 bar4 = 'upn80'
 bar5 = 'upn80'
 
@@ -187,7 +187,7 @@ datos = {
     # configuraciones
     'con': [
         # xmin, xmax, ymin, ymax, escm, escq, escn
-        -3, 25, -2, 10, 1/15000, 1/15000, 1/15000
+        -3, 25, -2, 10, 1/10000, 1/15000, 1/15000
     ],
     'pesos': {
         1: 15.82,
